@@ -1,5 +1,5 @@
-import 'Date.dart';
-import 'Timing.dart';
+import 'package:emsakia/Models/Date.dart';
+import 'package:emsakia/Models/Timing.dart';
 
 class Data {
   Timings timings;

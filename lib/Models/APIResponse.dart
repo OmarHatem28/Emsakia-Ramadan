@@ -1,4 +1,4 @@
-import 'Data.dart';
+import 'package:emsakia/Models/Data.dart';
 
 class APIResponse {
   int code;
