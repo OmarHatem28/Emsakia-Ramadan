@@ -214,44 +214,94 @@ class _MyHomePageState extends State<MyHomePage> {
     return Column(
       children: <Widget>[
         ListTile(
-          title: Text("Fajr",
-              style:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-          trailing: Text(_getTransformedTime(response.data[0].timings.fajr),
-              style:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+          title: Text(
+            "الفجر",
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Tajawal',
+            ),
+          ),
+          trailing: Text(
+            _getTransformedTime(response.data[0].timings.fajr),
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Tajawal',
+            ),
+          ),
         ),
         ListTile(
-          title: Text("Duhr",
-              style:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-          trailing: Text(_getTransformedTime(response.data[0].timings.dhuhr),
-              style:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+          title: Text(
+            "الظهر",
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Tajawal',
+            ),
+          ),
+          trailing: Text(
+            _getTransformedTime(response.data[0].timings.dhuhr),
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Tajawal',
+            ),
+          ),
         ),
         ListTile(
-          title: Text("Asr",
-              style:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-          trailing: Text(_getTransformedTime(response.data[0].timings.asr),
-              style:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+          title: Text(
+            "العصر",
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Tajawal',
+            ),
+          ),
+          trailing: Text(
+            _getTransformedTime(response.data[0].timings.asr),
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Tajawal',
+            ),
+          ),
         ),
         ListTile(
-          title: Text("Maghrib",
-              style:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-          trailing: Text(_getTransformedTime(response.data[0].timings.maghrib),
-              style:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+          title: Text(
+            "المغرب",
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Tajawal',
+            ),
+          ),
+          trailing: Text(
+            _getTransformedTime(response.data[0].timings.maghrib),
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Tajawal',
+            ),
+          ),
         ),
         ListTile(
-          title: Text("Isha",
-              style:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-          trailing: Text(_getTransformedTime(response.data[0].timings.isha),
-              style:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+          title: Text(
+            "العشاء",
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Tajawal',
+            ),
+          ),
+          trailing: Text(
+            _getTransformedTime(response.data[0].timings.isha),
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Tajawal',
+            ),
+          ),
         ),
       ],
     );
@@ -265,9 +315,11 @@ class _MyHomePageState extends State<MyHomePage> {
             child: Text(
               which,
               style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 30),
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 30,
+                fontFamily: 'Tajawal',
+              ),
             ),
             margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
           ),
@@ -285,9 +337,11 @@ class _MyHomePageState extends State<MyHomePage> {
                   return Text(
                     which == "الامساك" ? imsak : iftar,
                     style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20),
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                      fontFamily: 'Tajawal',
+                    ),
                   );
                 } else if (snapshot.hasError) {
                   return Text("No Internet");
