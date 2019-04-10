@@ -31,17 +31,12 @@ class CircleListItem extends StatelessWidget {
           ),
           child: Align(
             child: Container(
-//              child: Image.asset(
-//                item.img,
-//                fit: BoxFit.contain,
-//              ),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(60),
                 color: Colors.green,
                 image: DecorationImage(
                   image: AssetImage(
                     item.img,
-//                    fit: BoxFit.contain,
                   ),
                   fit: BoxFit.fill
                 ),

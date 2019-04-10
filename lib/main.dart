@@ -28,6 +28,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   wheel.FixedExtentScrollController _controller;
+  bool notifications = false;
 
   List<CircularItem> listItems = [
     new CircularItem("Quran", 'img/ramdan_cover5.jpg'),
@@ -145,24 +146,40 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
-                        IconButton(
-                          icon: Icon(
-                            Icons.add,
+                        Container(
+                          child: Column(
+                            children: <Widget>[
+                              Text("Emsak", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                              Container(
+                                padding: EdgeInsets.all(5),
+                                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                                child: Text("03:00", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5),
+                                  border: Border.all(color: Colors.yellowAccent),
+                                ),
+                              ),
+                            ],
                           ),
-                          onPressed: () {
-                            debugPrint("Hello");
-                          },
                         ),
                         Expanded(
                           child: Container(),
                         ),
-                        IconButton(
-                          icon: Icon(
-                            Icons.share,
+                        Container(
+                          child: Column(
+                            children: <Widget>[
+                              Text("Iftar", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                              Container(
+                                padding: EdgeInsets.all(5),
+                                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                                child: Text("07:00", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5),
+                                  border: Border.all(color: Colors.yellowAccent),
+                                ),
+                              ),
+                            ],
                           ),
-                          onPressed: () {
-                            debugPrint("Hello");
-                          },
                         ),
                       ],
                     ),
@@ -177,12 +194,15 @@ class _MyHomePageState extends State<MyHomePage> {
                 translation: Offset(0.0, -0.5),
                 child: FloatingActionButton(
                   onPressed: () {
-                    print('Touch');
+                    notifications = !notifications;
+                    setState(() {});
                   },
                   backgroundColor: Colors.white,
                   child: Icon(
-                    Icons.notifications_active,
-                    color: Colors.green,
+                    notifications
+                        ? Icons.notifications_active
+                        : Icons.notifications_off,
+                    color: notifications ? Colors.green : Colors.grey,
                     size: 40,
                   ),
                 ),
@@ -231,27 +251,35 @@ class _MyHomePageState extends State<MyHomePage> {
       children: <Widget>[
         ListTile(
           title: Text("Fajr"),
-          trailing: Text(response.data[0].timings.fajr),
+          trailing: Text(_getTransformedTime(response.data[0].timings.fajr)),
         ),
         ListTile(
           title: Text("Duhr"),
-          trailing: Text(response.data[0].timings.dhuhr),
+          trailing: Text(_getTransformedTime(response.data[0].timings.dhuhr)),
         ),
         ListTile(
           title: Text("Asr"),
-          trailing: Text(response.data[0].timings.asr),
+          trailing: Text(_getTransformedTime(response.data[0].timings.asr)),
         ),
         ListTile(
           title: Text("Maghrib"),
-          trailing: Text(response.data[0].timings.maghrib),
+          trailing: Text(_getTransformedTime(response.data[0].timings.maghrib)),
         ),
         ListTile(
           title: Text("Isha"),
-          trailing: Text(response.data[0].timings.isha),
+          trailing: Text(_getTransformedTime(response.data[0].timings.isha)),
         ),
       ],
     );
   }
+
+  String _getTransformedTime(String unFormattedTime) {
+    RegExp exp = new RegExp(r"(\d{2}:\d{2})\s+");
+    Match match = exp.firstMatch(unFormattedTime);
+
+    return match.group(0);
+  }
+
 }
 
 class Mclipper extends CustomClipper<Path> {
