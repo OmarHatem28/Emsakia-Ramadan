@@ -29,6 +29,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   wheel.FixedExtentScrollController _controller;
   bool notifications = false;
+  var width = 0.0;
 
   List<CircularItem> listItems = [
     new CircularItem("Quran", 'img/ramdan_cover5.jpg'),
@@ -68,27 +69,32 @@ class _MyHomePageState extends State<MyHomePage> {
           _buildBody(context),
         ],
       ),
-      drawer: wheel.CircleListScrollView.useDelegate(
-          itemExtent: 120,
-          physics: wheel.CircleFixedExtentScrollPhysics(),
-          controller: _controller,
-          axis: Axis.vertical,
-          radius: MediaQuery.of(context).size.width * 0.8,
-          childDelegate: wheel.CircleListChildBuilderDelegate(
-            builder: (context, index) {
-              int currentIndex = 0;
-              try {
-                currentIndex = _controller.selectedItem;
-              } catch (_) {}
-              final resizeFactor =
-                  (1 - (((currentIndex - index).abs() * 0.3).clamp(0.0, 1.0)));
-              return CircleListItem(
-                resizeFactor: resizeFactor,
-                item: listItems[index],
-              );
-            },
-            childCount: listItems.length,
-          )),
+      drawer: _buildDrawer(),
+    );
+  }
+
+  Widget _buildDrawer() {
+    return wheel.CircleListScrollView.useDelegate(
+        itemExtent: 120,
+        physics: wheel.CircleFixedExtentScrollPhysics(),
+        controller: _controller,
+        axis: Axis.vertical,
+        radius: MediaQuery.of(context).size.width * 0.8,
+        childDelegate: wheel.CircleListChildBuilderDelegate(
+          builder: (context, index) {
+            int currentIndex = 0;
+            try {
+              currentIndex = _controller.selectedItem;
+            } catch (_) {}
+            final resizeFactor =
+            (1 - (((currentIndex - index).abs() * 0.3).clamp(0.0, 1.0)));
+            return CircleListItem(
+              resizeFactor: resizeFactor,
+              item: listItems[index],
+            );
+          },
+          childCount: listItems.length,
+        ),
     );
   }
 
@@ -111,7 +117,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return Container(
       child: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {
-        var width = constraints.biggest.width;
+        width = constraints.biggest.width;
         return Stack(
           children: <Widget>[
             Container(
@@ -146,68 +152,18 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
-                        Container(
-                          child: Column(
-                            children: <Widget>[
-                              Text("Emsak", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-                              Container(
-                                padding: EdgeInsets.all(5),
-                                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                                child: Text("03:00", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5),
-                                  border: Border.all(color: Colors.yellowAccent),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                        showIftarImsakTime("الامساك"),
                         Expanded(
                           child: Container(),
                         ),
-                        Container(
-                          child: Column(
-                            children: <Widget>[
-                              Text("Iftar", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-                              Container(
-                                padding: EdgeInsets.all(5),
-                                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                                child: Text("07:00", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5),
-                                  border: Border.all(color: Colors.yellowAccent),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                        showIftarImsakTime("الافطار"),
                       ],
                     ),
                   )
                 ],
               ),
             ),
-            Positioned(
-              right: width / 2 - 25,
-              top: width,
-              child: FractionalTranslation(
-                translation: Offset(0.0, -0.5),
-                child: FloatingActionButton(
-                  onPressed: () {
-                    notifications = !notifications;
-                    setState(() {});
-                  },
-                  backgroundColor: Colors.white,
-                  child: Icon(
-                    notifications
-                        ? Icons.notifications_active
-                        : Icons.notifications_off,
-                    color: notifications ? Colors.green : Colors.grey,
-                    size: 40,
-                  ),
-                ),
-              ),
-            )
+            notificationAlert(),
           ],
         );
       }),
@@ -278,6 +234,49 @@ class _MyHomePageState extends State<MyHomePage> {
     Match match = exp.firstMatch(unFormattedTime);
 
     return match.group(0);
+  }
+
+  Widget showIftarImsakTime( String which) {
+    return Container(
+      child: Column(
+        children: <Widget>[
+          Text(which, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+          Container(
+            padding: EdgeInsets.all(5),
+            margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+            child: Text(which == "الامساك" ? "03:00" : "07:00", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              border: Border.all(color: Colors.yellowAccent),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget notificationAlert() {
+    return Positioned(
+      right: width / 2 - 25,
+      top: width,
+      child: FractionalTranslation(
+        translation: Offset(0.0, -0.5),
+        child: FloatingActionButton(
+          onPressed: () {
+            notifications = !notifications;
+            setState(() {});
+          },
+          backgroundColor: Colors.white,
+          child: Icon(
+            notifications
+                ? Icons.notifications_active
+                : Icons.notifications_off,
+            color: notifications ? Colors.green : Colors.grey,
+            size: 40,
+          ),
+        ),
+      ),
+    );
   }
 
 }
