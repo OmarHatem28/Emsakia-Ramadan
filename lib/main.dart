@@ -28,8 +28,23 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   wheel.FixedExtentScrollController _controller;
-  bool notifications = false;
+  bool notifications = true;
   var width = 0.0;
+  final MaterialColor primaryColorShades = MaterialColor(
+    0xFF38003C,
+    <int, Color>{
+      50: Color(0xFF38003C),
+      100: Color(0xFF38003C),
+      200: Color(0xFF38003C),
+      300: Color(0xFF38003C),
+      400: Color(0xFF38003C),
+      500: Color(0xFF38003C),
+      600: Color(0xFF38003C),
+      700: Color(0xFF38003C),
+      800: Color(0xFF38003C),
+      900: Color(0xFF38003C),
+    },
+  );
 
   List<CircularItem> listItems = [
     new CircularItem("Quran", 'img/ramdan_cover5.jpg'),
@@ -63,7 +78,8 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromRGBO(25, 117, 25, 1),
+//      backgroundColor: Color.fromRGBO(25, 117, 25, 1),
+      backgroundColor: primaryColorShades,
       body: Stack(
         children: <Widget>[
           _buildBody(context),
@@ -75,26 +91,28 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget _buildDrawer() {
     return wheel.CircleListScrollView.useDelegate(
-        itemExtent: 120,
-        physics: wheel.CircleFixedExtentScrollPhysics(),
-        controller: _controller,
-        axis: Axis.vertical,
-        radius: MediaQuery.of(context).size.width * 0.8,
-        childDelegate: wheel.CircleListChildBuilderDelegate(
-          builder: (context, index) {
-            int currentIndex = 0;
-            try {
-              currentIndex = _controller.selectedItem;
-            } catch (_) {}
-            final resizeFactor =
-            (1 - (((currentIndex - index).abs() * 0.3).clamp(0.0, 1.0)));
-            return CircleListItem(
-              resizeFactor: resizeFactor,
-              item: listItems[index],
-            );
-          },
-          childCount: listItems.length,
-        ),
+      itemExtent: 120,
+      physics: wheel.CircleFixedExtentScrollPhysics(),
+      controller: _controller,
+      axis: Axis.vertical,
+      radius: MediaQuery.of(context).size.width * 0.8,
+      childDelegate: wheel.CircleListChildBuilderDelegate(
+        builder: (context, index) {
+          int currentIndex = 0;
+          try {
+            currentIndex = _controller.selectedItem;
+          } catch (_) {}
+          final resizeFactor =
+              (1 - (((currentIndex - index).abs() * 0.3).clamp(0.0, 1.0)));
+          return FlatButton(
+              onPressed: () => debugPrint("Pressed"),
+              child: CircleListItem(
+                resizeFactor: resizeFactor,
+                item: listItems[index],
+              ));
+        },
+        childCount: listItems.length,
+      ),
     );
   }
 
@@ -113,7 +131,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  _buildBackdrop(BuildContext context) {
+  Widget _buildBackdrop(BuildContext context) {
     return Container(
       child: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {
@@ -141,7 +159,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         width: width,
                         height: width,
                         child: Image.asset(
-                          "img/ramdan_cover1.jpg",
+                          "img/ramdan_cover5.jpg",
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -192,62 +210,95 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Future<APIResponse> getPrayers() async {
-    final response = await http.get(
-        'http://api.aladhan.com/v1/hijriCalendarByCity?city=cairo&country=Egypt&method=5&month=09&year=1440');
-    if (response.statusCode == 200) {
-      return APIResponse.fromJson(jsonDecode(response.body));
-    } else {
-      throw Exception("Check Your Internet Connection");
-    }
-  }
-
   Widget buildSchedule(APIResponse response) {
     return Column(
       children: <Widget>[
         ListTile(
-          title: Text("Fajr"),
-          trailing: Text(_getTransformedTime(response.data[0].timings.fajr)),
+          title: Text("Fajr",
+              style:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+          trailing: Text(_getTransformedTime(response.data[0].timings.fajr),
+              style:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
         ),
         ListTile(
-          title: Text("Duhr"),
-          trailing: Text(_getTransformedTime(response.data[0].timings.dhuhr)),
+          title: Text("Duhr",
+              style:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+          trailing: Text(_getTransformedTime(response.data[0].timings.dhuhr),
+              style:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
         ),
         ListTile(
-          title: Text("Asr"),
-          trailing: Text(_getTransformedTime(response.data[0].timings.asr)),
+          title: Text("Asr",
+              style:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+          trailing: Text(_getTransformedTime(response.data[0].timings.asr),
+              style:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
         ),
         ListTile(
-          title: Text("Maghrib"),
-          trailing: Text(_getTransformedTime(response.data[0].timings.maghrib)),
+          title: Text("Maghrib",
+              style:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+          trailing: Text(_getTransformedTime(response.data[0].timings.maghrib),
+              style:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
         ),
         ListTile(
-          title: Text("Isha"),
-          trailing: Text(_getTransformedTime(response.data[0].timings.isha)),
+          title: Text("Isha",
+              style:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+          trailing: Text(_getTransformedTime(response.data[0].timings.isha),
+              style:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
         ),
       ],
     );
   }
 
-  String _getTransformedTime(String unFormattedTime) {
-    RegExp exp = new RegExp(r"(\d{2}:\d{2})\s+");
-    Match match = exp.firstMatch(unFormattedTime);
-
-    return match.group(0);
-  }
-
-  Widget showIftarImsakTime( String which) {
+  Widget showIftarImsakTime(String which) {
     return Container(
       child: Column(
         children: <Widget>[
-          Text(which, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
           Container(
-            padding: EdgeInsets.all(5),
-            margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-            child: Text(which == "الامساك" ? "03:00" : "07:00", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
+            child: Text(
+              which,
+              style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 30),
+            ),
+            margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+          ),
+          Container(
+            padding: EdgeInsets.all(10),
+            margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+            child: FutureBuilder<APIResponse>(
+              future: results,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  String iftar = _getTransformedTime(
+                      snapshot.data.data[0].timings.maghrib);
+                  String imsak =
+                      _getTransformedTime(snapshot.data.data[0].timings.imsak);
+                  return Text(
+                    which == "الامساك" ? imsak : iftar,
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20),
+                  );
+                } else if (snapshot.hasError) {
+                  return Text("No Internet");
+                }
+                // By default, show a loading spinner
+                return CircularProgressIndicator();
+              },
+            ),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5),
-              border: Border.all(color: Colors.yellowAccent),
+              border: Border.all(color: Colors.yellowAccent, width: 3),
             ),
           ),
         ],
@@ -279,6 +330,22 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  Future<APIResponse> getPrayers() async {
+    final response = await http.get(
+        'http://api.aladhan.com/v1/hijriCalendarByCity?city=cairo&country=Egypt&method=5&month=09&year=1440');
+    if (response.statusCode == 200) {
+      return APIResponse.fromJson(jsonDecode(response.body));
+    } else {
+      throw Exception("Check Your Internet Connection");
+    }
+  }
+
+  String _getTransformedTime(String unFormattedTime) {
+    RegExp exp = new RegExp(r"(\d{2}:\d{2})\s+");
+    Match match = exp.firstMatch(unFormattedTime);
+
+    return match.group(0);
+  }
 }
 
 class Mclipper extends CustomClipper<Path> {
