@@ -32,6 +32,18 @@ class Timings {
     midnight = json['Midnight'];
   }
 
+  Timings.fromSnapShot(Map<dynamic, dynamic> json) {
+    fajr = json['Fajr'];
+    sunrise = json['Sunrise'];
+    dhuhr = json['Dhuhr'];
+    asr = json['Asr'];
+    sunset = json['Sunset'];
+    maghrib = json['Maghrib'];
+    isha = json['Isha'];
+    imsak = json['Imsak'];
+    midnight = json['Midnight'];
+  }
+
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['Fajr'] = this.fajr;

@@ -1,10 +1,12 @@
 import 'package:emsakia/CircularListItem.dart';
 import 'package:emsakia/Models/CircularItem.dart';
+import 'package:emsakia/Models/Data.dart';
 import 'package:flutter/material.dart';
 import 'package:emsakia/Models/APIResponse.dart';
 import 'package:http/http.dart' as http;
 import 'package:circle_wheel_scroll/circle_wheel_scroll_view.dart' as wheel;
 import 'dart:convert';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 void main() => runApp(MyApp());
 
@@ -58,14 +60,17 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {});
   }
 
-  Future<APIResponse> results;
+  List<Data> myData = new List();
+  Stream firebaseStream;
 
   @override
   void initState() {
     super.initState();
-    results = getPrayers();
     _controller = wheel.FixedExtentScrollController();
     _controller.addListener(_listListener);
+    firebaseStream = Firestore.instance
+        .collection('ramadan_date')
+        .snapshots();
   }
 
   @override
@@ -78,14 +83,14 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-//      backgroundColor: Color.fromRGBO(25, 117, 25, 1),
       backgroundColor: primaryColorShades,
-      body: Stack(
-        children: <Widget>[
-          _buildBody(context),
-        ],
+      body: _buildBody(context),
+      drawer: Drawer(
+        child: Container(
+          child: _buildDrawer(),
+          color: primaryColorShades,
+        ),
       ),
-      drawer: _buildDrawer(),
     );
   }
 
@@ -104,12 +109,10 @@ class _MyHomePageState extends State<MyHomePage> {
           } catch (_) {}
           final resizeFactor =
               (1 - (((currentIndex - index).abs() * 0.3).clamp(0.0, 1.0)));
-          return FlatButton(
-              onPressed: () => debugPrint("Pressed"),
-              child: CircleListItem(
-                resizeFactor: resizeFactor,
-                item: listItems[index],
-              ));
+          return CircleListItem(
+            resizeFactor: resizeFactor,
+            item: listItems[index],
+          );
         },
         childCount: listItems.length,
       ),
@@ -123,7 +126,7 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Container(
         child: Column(
           children: <Widget>[
-            _buildBackdrop(context),
+            _buildBackdrop(),
             _buildPrayerTimes(),
           ],
         ),
@@ -131,7 +134,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Widget _buildBackdrop(BuildContext context) {
+  Widget _buildBackdrop() {
     return Container(
       child: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {
@@ -182,6 +185,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             notificationAlert(),
+            drawerIndicator(context),
           ],
         );
       }),
@@ -193,16 +197,17 @@ class _MyHomePageState extends State<MyHomePage> {
       children: <Widget>[
         SizedBox(
           height: 300.0,
-          child: FutureBuilder<APIResponse>(
-            future: results,
+          child: StreamBuilder<QuerySnapshot>(
+            stream: firebaseStream,
             builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return buildSchedule(snapshot.data);
-              } else if (snapshot.hasError) {
-                return Text("${snapshot.error}");
-              }
-              // By default, show a loading spinner
-              return CircularProgressIndicator();
+              if (!snapshot.hasData) return CircularProgressIndicator();
+
+              //TODO: sort the documents
+
+              snapshot.data.documents.forEach( (doc) {
+                myData.add(Data.fromSnapshot(doc));
+              });
+              return buildSchedule(myData);
             },
           ),
         ),
@@ -210,7 +215,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Widget buildSchedule(APIResponse response) {
+  Widget buildSchedule(List<Data> data) {
     return Column(
       children: <Widget>[
         ListTile(
@@ -223,7 +228,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
           trailing: Text(
-            _getTransformedTime(response.data[0].timings.fajr),
+            data[0].timings.fajr,
             style: TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.bold,
@@ -241,7 +246,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
           trailing: Text(
-            _getTransformedTime(response.data[0].timings.dhuhr),
+            data[0].timings.dhuhr,
             style: TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.bold,
@@ -259,7 +264,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
           trailing: Text(
-            _getTransformedTime(response.data[0].timings.asr),
+            data[0].timings.asr,
             style: TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.bold,
@@ -277,7 +282,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
           trailing: Text(
-            _getTransformedTime(response.data[0].timings.maghrib),
+            data[0].timings.maghrib,
             style: TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.bold,
@@ -295,7 +300,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
           trailing: Text(
-            _getTransformedTime(response.data[0].timings.isha),
+            data[0].timings.isha,
             style: TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.bold,
@@ -326,28 +331,23 @@ class _MyHomePageState extends State<MyHomePage> {
           Container(
             padding: EdgeInsets.all(10),
             margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
-            child: FutureBuilder<APIResponse>(
-              future: results,
+            child: StreamBuilder<QuerySnapshot>(
+              stream: firebaseStream,
               builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  String iftar = _getTransformedTime(
-                      snapshot.data.data[0].timings.maghrib);
-                  String imsak =
-                      _getTransformedTime(snapshot.data.data[0].timings.imsak);
-                  return Text(
-                    which == "الامساك" ? imsak : iftar,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                      fontFamily: 'Tajawal',
-                    ),
-                  );
-                } else if (snapshot.hasError) {
-                  return Text("No Internet");
-                }
-                // By default, show a loading spinner
-                return CircularProgressIndicator();
+                if ( !snapshot.hasData ) return CircularProgressIndicator();
+
+                // TODO: adjust data to be for every day not just the first
+                String iftar = Data.fromSnapshot(snapshot.data.documents[0]).timings.maghrib;
+                String imsak = Data.fromSnapshot(snapshot.data.documents[0]).timings.imsak;
+                return Text(
+                  which == "الامساك" ? imsak : iftar,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                    fontFamily: 'Tajawal',
+                  ),
+                );
               },
             ),
             decoration: BoxDecoration(
@@ -384,22 +384,39 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Future<APIResponse> getPrayers() async {
-    final response = await http.get(
-        'http://api.aladhan.com/v1/hijriCalendarByCity?city=cairo&country=Egypt&method=5&month=09&year=1440');
-    if (response.statusCode == 200) {
-      return APIResponse.fromJson(jsonDecode(response.body));
-    } else {
-      throw Exception("Check Your Internet Connection");
-    }
+  Widget drawerIndicator(BuildContext context) {
+    return Positioned(
+      left: width / 10 - 60,
+      top: width - 40,
+      child: FractionalTranslation(
+        translation: Offset(0.0, -0.5),
+        child: FloatingActionButton(
+          onPressed: () {
+            Scaffold.of(context).openDrawer();
+          },
+          backgroundColor: Colors.white,
+          child: Container(
+            child: Icon(
+              Icons.arrow_forward,
+              color: primaryColorShades,
+              size: 40,
+            ),
+            padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
+          ),
+        ),
+      ),
+    );
   }
 
-  String _getTransformedTime(String unFormattedTime) {
-    RegExp exp = new RegExp(r"(\d{2}:\d{2})\s+");
-    Match match = exp.firstMatch(unFormattedTime);
-
-    return match.group(0);
-  }
+//  Future<APIResponse> getPrayers() async {
+//    final response = await http.get(
+//        'http://api.aladhan.com/v1/hijriCalendarByCity?city=cairo&country=Egypt&method=5&month=09&year=1440');
+//    if (response.statusCode == 200) {
+//      return APIResponse.fromJson(jsonDecode(response.body));
+//    } else {
+//      throw Exception("Check Your Internet Connection");
+//    }
+//  }
 }
 
 class Mclipper extends CustomClipper<Path> {

@@ -17,6 +17,12 @@ class Hijri {
     holidays = json['holidays'].cast<String>();
   }
 
+  Hijri.fromSnapShot(Map<dynamic, dynamic> json) {
+    date = json['date'];
+    format = json['format'];
+    day = json['day'];
+  }
+
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['date'] = this.date;
