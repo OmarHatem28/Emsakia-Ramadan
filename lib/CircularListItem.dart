@@ -29,7 +29,7 @@ class CircleListItem extends StatelessWidget {
             height: 120 * resizeFactor,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(60),
-              color: Colors.yellowAccent,
+              color: Color(0xFFFFC819),
             ),
             child: Align(
               child: Container(

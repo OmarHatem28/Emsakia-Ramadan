@@ -50,9 +50,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   List<CircularItem> listItems = [
     new CircularItem("Quran", 'img/ramdan_cover5.jpg'),
-    new CircularItem("Azkar", 'img/ramdan_cover5.jpg'),
+    new CircularItem("Azkar", 'img/ramdan_cover1.jpg'),
     new CircularItem("Ad3ya", 'img/ramdan_cover5.jpg'),
-    new CircularItem("Seb7a", 'img/ramdan_cover5.jpg'),
+    new CircularItem("Seb7a", 'img/ramdan_cover1.jpg'),
     new CircularItem("A7adeeth", 'img/ramdan_cover5.jpg'),
   ];
 
@@ -109,9 +109,12 @@ class _MyHomePageState extends State<MyHomePage> {
           } catch (_) {}
           final resizeFactor =
               (1 - (((currentIndex - index).abs() * 0.3).clamp(0.0, 1.0)));
-          return CircleListItem(
-            resizeFactor: resizeFactor,
-            item: listItems[index],
+          return GestureDetector(
+            child: CircleListItem(
+              resizeFactor: resizeFactor,
+              item: listItems[index],
+            ),
+            onTap: () => print("Warhit" + index.toString()),
           );
         },
         childCount: listItems.length,
@@ -202,8 +205,7 @@ class _MyHomePageState extends State<MyHomePage> {
             builder: (context, snapshot) {
               if (!snapshot.hasData) return CircularProgressIndicator();
 
-              //TODO: sort the documents
-
+              snapshot.data.documents.sort((docA, docB) => (docA.data['date']['hijri']['day']).toString().compareTo((docB.data['date']['hijri']['day']).toString()));
               snapshot.data.documents.forEach( (doc) {
                 myData.add(Data.fromSnapshot(doc));
               });
@@ -329,7 +331,7 @@ class _MyHomePageState extends State<MyHomePage> {
             margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
           ),
           Container(
-            padding: EdgeInsets.all(10),
+            padding: EdgeInsets.fromLTRB(10, 15, 10, 10),
             margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
             child: StreamBuilder<QuerySnapshot>(
               stream: firebaseStream,
@@ -337,8 +339,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 if ( !snapshot.hasData ) return CircularProgressIndicator();
 
                 // TODO: adjust data to be for every day not just the first
-                String iftar = Data.fromSnapshot(snapshot.data.documents[0]).timings.maghrib;
-                String imsak = Data.fromSnapshot(snapshot.data.documents[0]).timings.imsak;
+                String iftar = myData[0].timings.maghrib;
+                String imsak = myData[0].timings.imsak;
                 return Text(
                   which == "الامساك" ? imsak : iftar,
                   style: TextStyle(
@@ -352,7 +354,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5),
-              border: Border.all(color: Colors.yellowAccent, width: 3),
+              border: Border.all(color: Color(0xFFFFC819), width: 3),
             ),
           ),
         ],
