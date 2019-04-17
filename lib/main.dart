@@ -10,6 +10,8 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 
+Stream firebaseStream;
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -21,7 +23,13 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: MyHomePage(),
-
+      routes: {
+//        '/0' : (context) => null,
+//        '/1' : (context) => null,
+//        '/2' : (context) => null,
+//        '/3' : (context) => null,
+//        '/4' : (context) => null,
+      },
     );
   }
 }
@@ -32,8 +40,9 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  wheel.FixedExtentScrollController _controller;
+  bool currState = false;   // false == show Emsakya, true == show Prayers
   bool notifications = true;
+  int startingIndex = 1;
   var width = 0.0;
   final MaterialColor primaryColorShades = MaterialColor(
     0xFF38003C,
@@ -52,33 +61,19 @@ class _MyHomePageState extends State<MyHomePage> {
   );
 
   List<CircularItem> listItems = [
-    new CircularItem("Quran", 'img/ramdan_cover5.jpg'),
-    new CircularItem("Azkar", 'img/ramdan_cover1.jpg'),
-    new CircularItem("Ad3ya", 'img/ramdan_cover5.jpg'),
-    new CircularItem("Seb7a", 'img/ramdan_cover1.jpg'),
-    new CircularItem("A7adeeth", 'img/ramdan_cover5.jpg'),
+    new CircularItem("الامساكية", 'img/ramdan_cover5.jpg'),
+    new CircularItem("مواقيت الصلاة", 'img/ramdan_cover1.jpg'),
+    new CircularItem("القرأن", 'img/ramdan_cover5.jpg'),
+    new CircularItem("الأذكار", 'img/ramdan_cover1.jpg'),
+    new CircularItem("السبحة", 'img/ramdan_cover5.jpg'),
   ];
 
-  _listListener() {
-    print("hi");
-  }
-
   List<Data> myData = new List();
-  Stream firebaseStream;
 
   @override
   void initState() {
     super.initState();
-    _controller = wheel.FixedExtentScrollController();
-//    _controller.addListener(_listListener);
     firebaseStream = Firestore.instance.collection('ramadan_date').snapshots();
-  }
-
-  @override
-  void dispose() {
-//    _controller.removeListener(_listListener);
-//    _controller.dispose();
-    super.dispose();
   }
 
   @override
@@ -95,18 +90,6 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Widget _buildItem(int i) {
-    final resizeFactor = (1 - (((0 - i).abs() * 0.3).clamp(0.0, 1.0)));
-    return GestureDetector(
-      child: CircleListItem(
-        resizeFactor: resizeFactor,
-        item: listItems[i],
-      ),
-      onTap: () => print("omar " + i.toString()),
-//      behavior: HitTestBehavior.opaque,
-    );
-  }
-
   Widget _buildDrawer() {
     final resizeFactor = (1 - (((0 - 0).abs() * 0.3).clamp(0.0, 1.0)));
     return SafeArea(
@@ -119,9 +102,20 @@ class _MyHomePageState extends State<MyHomePage> {
                 resizeFactor: resizeFactor,
                 item: listItems[index],
               ),
-              onTap: () => print("inside "+index.toString()),
+              onTap: () {
+                if ( index == 1 ){
+                  startingIndex = 2;
+
+                }
+                setState(() {
+                  firebaseStream = Firestore.instance.collection('ramadan_date').snapshots();
+                  currState = !currState;
+                  Navigator.pop(context);
+                });
+              },
             );
           },
+//          index: startingIndex,
           viewportFraction: 0.3,
           scale: 0.0001,
           fade: 0.01,
@@ -141,7 +135,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           children: <Widget>[
             _buildBackdrop(),
-            _buildPrayerTimes(),
+            currState ? _buildPrayerTimes() : Container(),
           ],
         ),
       )),
@@ -187,11 +181,27 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
-                        showIftarImsakTime("الامساك"),
+                        currState ? Text(
+                          "اليوم",
+                          style: TextStyle(
+                            color: Color(0xFFFFC819),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 30,
+                            fontFamily: 'Tajawal',
+                          ),
+                        ) : showIftarImsakTime("الامساك"),
                         Expanded(
                           child: Container(),
                         ),
-                        showIftarImsakTime("الافطار"),
+                        currState ? Text(
+                          "مواقيت",
+                          style: TextStyle(
+                            color: Color(0xFFFFC819),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 30,
+                            fontFamily: 'Tajawal',
+                          ),
+                        ) : showIftarImsakTime("الافطار"),
                       ],
                     ),
                   )
@@ -353,8 +363,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 if (!snapshot.hasData) return CircularProgressIndicator();
 
                 // TODO: adjust data to be for every day not just the first
-                String iftar = myData[0].timings.maghrib;
-                String imsak = myData[0].timings.imsak;
+                String iftar = Data.fromSnapshot(snapshot.data.documents[0]).timings.maghrib;
+                String imsak = Data.fromSnapshot(snapshot.data.documents[0]).timings.imsak;
                 return Text(
                   which == "الامساك" ? imsak : iftar,
                   style: TextStyle(
