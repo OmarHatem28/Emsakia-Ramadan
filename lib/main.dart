@@ -4,9 +4,11 @@ import 'package:emsakia/Models/Data.dart';
 import 'package:flutter/material.dart';
 import 'package:emsakia/Models/APIResponse.dart';
 import 'package:http/http.dart' as http;
+import 'package:circle_wheel_scroll/circle_wheel_scroll_view.dart';
 import 'package:circle_wheel_scroll/circle_wheel_scroll_view.dart' as wheel;
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_swiper/flutter_swiper.dart';
 
 void main() => runApp(MyApp());
 
@@ -19,6 +21,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: MyHomePage(),
+
     );
   }
 }
@@ -57,7 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
   ];
 
   _listListener() {
-    setState(() {});
+    print("hi");
   }
 
   List<Data> myData = new List();
@@ -67,16 +70,14 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     _controller = wheel.FixedExtentScrollController();
-    _controller.addListener(_listListener);
-    firebaseStream = Firestore.instance
-        .collection('ramadan_date')
-        .snapshots();
+//    _controller.addListener(_listListener);
+    firebaseStream = Firestore.instance.collection('ramadan_date').snapshots();
   }
 
   @override
   void dispose() {
-    _controller.removeListener(_listListener);
-    _controller.dispose();
+//    _controller.removeListener(_listListener);
+//    _controller.dispose();
     super.dispose();
   }
 
@@ -94,30 +95,40 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  Widget _buildItem(int i) {
+    final resizeFactor = (1 - (((0 - i).abs() * 0.3).clamp(0.0, 1.0)));
+    return GestureDetector(
+      child: CircleListItem(
+        resizeFactor: resizeFactor,
+        item: listItems[i],
+      ),
+      onTap: () => print("omar " + i.toString()),
+//      behavior: HitTestBehavior.opaque,
+    );
+  }
+
   Widget _buildDrawer() {
-    return wheel.CircleListScrollView.useDelegate(
-      itemExtent: 120,
-      physics: wheel.CircleFixedExtentScrollPhysics(),
-      controller: _controller,
-      axis: Axis.vertical,
-      radius: MediaQuery.of(context).size.width * 0.8,
-      childDelegate: wheel.CircleListChildBuilderDelegate(
-        builder: (context, index) {
-          int currentIndex = 0;
-          try {
-            currentIndex = _controller.selectedItem;
-          } catch (_) {}
-          final resizeFactor =
-              (1 - (((currentIndex - index).abs() * 0.3).clamp(0.0, 1.0)));
-          return GestureDetector(
-            child: CircleListItem(
-              resizeFactor: resizeFactor,
-              item: listItems[index],
-            ),
-            onTap: () => print("Warhit" + index.toString()),
-          );
-        },
-        childCount: listItems.length,
+    final resizeFactor = (1 - (((0 - 0).abs() * 0.3).clamp(0.0, 1.0)));
+    return SafeArea(
+      child: Center(
+        child: Swiper(
+          itemCount: 5,
+          itemBuilder: (context, index) {
+            return GestureDetector(
+              child: CircleListItem(
+                resizeFactor: resizeFactor,
+                item: listItems[index],
+              ),
+              onTap: () => print("inside "+index.toString()),
+            );
+          },
+          viewportFraction: 0.3,
+          scale: 0.0001,
+          fade: 0.01,
+          scrollDirection: Axis.vertical,
+          physics: FixedExtentScrollPhysics(),
+//          onTap: (i) => print ("outside "+i.toString()),
+        ),
       ),
     );
   }
@@ -205,8 +216,11 @@ class _MyHomePageState extends State<MyHomePage> {
             builder: (context, snapshot) {
               if (!snapshot.hasData) return CircularProgressIndicator();
 
-              snapshot.data.documents.sort((docA, docB) => (docA.data['date']['hijri']['day']).toString().compareTo((docB.data['date']['hijri']['day']).toString()));
-              snapshot.data.documents.forEach( (doc) {
+              snapshot.data.documents.sort((docA, docB) => (docA.data['date']
+                      ['hijri']['day'])
+                  .toString()
+                  .compareTo((docB.data['date']['hijri']['day']).toString()));
+              snapshot.data.documents.forEach((doc) {
                 myData.add(Data.fromSnapshot(doc));
               });
               return buildSchedule(myData);
@@ -336,7 +350,7 @@ class _MyHomePageState extends State<MyHomePage> {
             child: StreamBuilder<QuerySnapshot>(
               stream: firebaseStream,
               builder: (context, snapshot) {
-                if ( !snapshot.hasData ) return CircularProgressIndicator();
+                if (!snapshot.hasData) return CircularProgressIndicator();
 
                 // TODO: adjust data to be for every day not just the first
                 String iftar = myData[0].timings.maghrib;
