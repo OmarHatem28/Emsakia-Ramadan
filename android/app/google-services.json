@@ -1,42 +1,34 @@
 {
   "project_info": {
-    "project_number": "441546755645",
-    "firebase_url": "https://emsakia-c83f4.firebaseio.com",
-    "project_id": "emsakia-c83f4",
-    "storage_bucket": "emsakia-c83f4.appspot.com"
+    "project_number": "898484185002",
+    "firebase_url": "https://emsakya.firebaseio.com",
+    "project_id": "emsakya",
+    "storage_bucket": "emsakya.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:441546755645:android:960148203f8b1eb2",
+        "mobilesdk_app_id": "1:898484185002:android:960148203f8b1eb2",
         "android_client_info": {
           "package_name": "com.warhit.emsakia"
         }
       },
       "oauth_client": [
         {
-          "client_id": "441546755645-ibou548426pekjtvv9bqmrba7spshfl4.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.warhit.emsakia",
-            "certificate_hash": "43a6edd7934ed7cdba53f37a0e7f9a4bb7267ea4"
-          }
-        },
-        {
-          "client_id": "441546755645-nkl6gf3iova0tmuop2hvh67ln7nkounh.apps.googleusercontent.com",
+          "client_id": "898484185002-4hcccrh72tbpul9bodps4q8a7duq1g2s.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAfrNU6BwKhk6Yf95xQQlOT6mH5l4QgfpE"
+          "current_key": "AIzaSyAR5NxHJPFK9brjk-5s-vFDPTW3tWqmKms"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "441546755645-nkl6gf3iova0tmuop2hvh67ln7nkounh.apps.googleusercontent.com",
+              "client_id": "898484185002-4hcccrh72tbpul9bodps4q8a7duq1g2s.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
@@ -45,14 +37,14 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:441546755645:android:763099bf851b9f19",
+        "mobilesdk_app_id": "1:898484185002:android:763099bf851b9f19",
         "android_client_info": {
           "package_name": "io.digitalsigma.emsakya"
         }
       },
       "oauth_client": [
         {
-          "client_id": "441546755645-89l2hadc6sc45rqptksoido138i61csm.apps.googleusercontent.com",
+          "client_id": "898484185002-imdbqgntcej9kpnendr3gicrgd8ct985.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "io.digitalsigma.emsakya",
@@ -60,28 +52,20 @@
           }
         },
         {
-          "client_id": "441546755645-8nvtjmhjjgdt9905k7eo0urs9fi194hk.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "io.digitalsigma.emsakya",
-            "certificate_hash": "43a6edd7934ed7cdba53f37a0e7f9a4bb7267ea4"
-          }
-        },
-        {
-          "client_id": "441546755645-nkl6gf3iova0tmuop2hvh67ln7nkounh.apps.googleusercontent.com",
+          "client_id": "898484185002-4hcccrh72tbpul9bodps4q8a7duq1g2s.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAfrNU6BwKhk6Yf95xQQlOT6mH5l4QgfpE"
+          "current_key": "AIzaSyAR5NxHJPFK9brjk-5s-vFDPTW3tWqmKms"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "441546755645-nkl6gf3iova0tmuop2hvh67ln7nkounh.apps.googleusercontent.com",
+              "client_id": "898484185002-4hcccrh72tbpul9bodps4q8a7duq1g2s.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

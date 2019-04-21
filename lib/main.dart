@@ -39,11 +39,11 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  static FireStoreSingleton fireStoreSingleton;
+//  static FireStoreSingleton fireStoreSingleton;
   Stream firebaseStream;
   bool currState = false; // false == show Emsakya, true == show Prayers
   bool notifications = true;
-  int startingIndex = 1;
+  int startingIndex = 0;
   var width = 0.0;
   final MaterialColor primaryColorShades = MaterialColor(
     0xFF38003C,
@@ -102,20 +102,38 @@ class _MyHomePageState extends State<MyHomePage> {
               item: listItems[index],
             ),
             onTap: () {
-              if (index == 1) {
-                startingIndex = 2;
-              }
-              setState(() {
-                firebaseStream =
-                    Firestore.instance.collection('ramadan_date').snapshots();
-                currState = !currState;
+              if ( index == 0 ){
+                if ( currState ){ // if what is showing now is Prayer Times, show Emsakya
+                  setState(() {
+                    startingIndex = index;
+                    firebaseStream =
+                        Firestore.instance.collection('ramadan_date').snapshots();
+                    currState = !currState;
 //                firebaseStream = FireStoreSingleton.getInstance();
-                Navigator.pop(context);
-              });
+                    Navigator.pop(context);
+                  });
+                }
+                else
+                  Navigator.pop(context);
+              }
+              else if (index == 1) {
+                if ( !currState ){
+                  startingIndex = index;
+                  setState(() {
+                    firebaseStream =
+                        Firestore.instance.collection('ramadan_date').snapshots();
+                    currState = !currState;
+//                firebaseStream = FireStoreSingleton.getInstance();
+                    Navigator.pop(context);
+                  });
+                }
+                else
+                  Navigator.pop(context);
+              }
             },
           );
         },
-//          index: startingIndex,
+//        index: startingIndex,
         viewportFraction: 0.3,
         scale: 0.0001,
         fade: 0.01,
@@ -245,59 +263,39 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget buildSchedule(List<Data> data) {
-    return Column(
-      children: <Widget>[
-        ListTile(
-          title: Text(
-            "الفجر",
-            style: MyTextStyle.minorText,
+    List<String> names = new List();
+    List<String> times = new List();
+    names.add("الفجر");
+    names.add("الظهر");
+    names.add("العصر");
+    names.add("المغرب");
+    names.add("العشاء");
+    times.add(data[0].timings.fajr);
+    times.add(data[0].timings.dhuhr);
+    times.add(data[0].timings.asr);
+    times.add(data[0].timings.maghrib);
+    times.add(data[0].timings.isha);
+    return ListView.builder(
+      itemCount: 10,
+      itemBuilder: (context, index) {
+        if ( index%2 == 1 )
+          return Divider();
+
+        int i = index~/2;
+        return Container(
+          margin: EdgeInsets.fromLTRB(20, 0, 25, 0),
+          child: ListTile(
+            title: Text(
+              times[i],
+              style: MyTextStyle.minorText,
+            ),
+            trailing: Text(
+              names[i],
+              style: MyTextStyle.minorText,
+            ),
           ),
-          trailing: Text(
-            data[0].timings.fajr,
-            style: MyTextStyle.minorText,
-          ),
-        ),
-        ListTile(
-          title: Text(
-            "الظهر",
-            style: MyTextStyle.minorText,
-          ),
-          trailing: Text(
-            data[0].timings.dhuhr,
-            style: MyTextStyle.minorText,
-          ),
-        ),
-        ListTile(
-          title: Text(
-            "العصر",
-            style: MyTextStyle.minorText,
-          ),
-          trailing: Text(
-            data[0].timings.asr,
-            style: MyTextStyle.minorText,
-          ),
-        ),
-        ListTile(
-          title: Text(
-            "المغرب",
-            style: MyTextStyle.minorText,
-          ),
-          trailing: Text(
-            data[0].timings.maghrib,
-            style: MyTextStyle.minorText,
-          ),
-        ),
-        ListTile(
-          title: Text(
-            "العشاء",
-            style: MyTextStyle.minorText,
-          ),
-          trailing: Text(
-            data[0].timings.isha,
-            style: MyTextStyle.minorText,
-          ),
-        ),
-      ],
+        );
+      },
     );
   }
 
@@ -333,12 +331,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     Data.fromSnapshot(snapshot.data.documents[0]).timings.imsak;
                 return Text(
                   which == "الامساك" ? imsak : iftar,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                    fontFamily: 'Tajawal',
-                  ),
+                  style: MyTextStyle.minorText,
                 );
               },
             ),
@@ -419,6 +412,7 @@ abstract class MyTextStyle {
   static const minorText = TextStyle(
     color: Colors.white,
     fontWeight: FontWeight.bold,
+    fontSize: 18,
     fontFamily: 'Tajawal',
   );
 }
