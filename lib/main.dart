@@ -9,8 +9,7 @@ import 'package:circle_wheel_scroll/circle_wheel_scroll_view.dart' as wheel;
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
-
-Stream firebaseStream;
+import 'Models/FireStoreSingleton.dart';
 
 void main() => runApp(MyApp());
 
@@ -40,7 +39,9 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  bool currState = false;   // false == show Emsakya, true == show Prayers
+  static FireStoreSingleton fireStoreSingleton;
+  Stream firebaseStream;
+  bool currState = false; // false == show Emsakya, true == show Prayers
   bool notifications = true;
   int startingIndex = 1;
   var width = 0.0;
@@ -74,6 +75,8 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     firebaseStream = Firestore.instance.collection('ramadan_date').snapshots();
+//    fireStoreSingleton = new FireStoreSingleton();
+//    firebaseStream = FireStoreSingleton.getInstance();
   }
 
   @override
@@ -81,48 +84,44 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       backgroundColor: primaryColorShades,
       body: _buildBody(context),
-      drawer: Drawer(
-        child: Container(
-          child: _buildDrawer(),
-          color: primaryColorShades,
-        ),
-      ),
+      drawer: _buildDrawer(),
     );
   }
 
   Widget _buildDrawer() {
     final resizeFactor = (1 - (((0 - 0).abs() * 0.3).clamp(0.0, 1.0)));
-    return SafeArea(
-      child: Center(
-        child: Swiper(
-          itemCount: 5,
-          itemBuilder: (context, index) {
-            return GestureDetector(
-              child: CircleListItem(
-                resizeFactor: resizeFactor,
-                item: listItems[index],
-              ),
-              onTap: () {
-                if ( index == 1 ){
-                  startingIndex = 2;
-
-                }
-                setState(() {
-                  firebaseStream = Firestore.instance.collection('ramadan_date').snapshots();
-                  currState = !currState;
-                  Navigator.pop(context);
-                });
-              },
-            );
-          },
+    return Container(
+      color: Color.fromRGBO(38, 0, 39, 0.8),
+      width: MediaQuery.of(context).size.width / 1.2,
+      child: Swiper(
+        itemCount: 5,
+        itemBuilder: (context, index) {
+          return GestureDetector(
+            child: CircleListItem(
+              resizeFactor: resizeFactor,
+              item: listItems[index],
+            ),
+            onTap: () {
+              if (index == 1) {
+                startingIndex = 2;
+              }
+              setState(() {
+                firebaseStream =
+                    Firestore.instance.collection('ramadan_date').snapshots();
+                currState = !currState;
+//                firebaseStream = FireStoreSingleton.getInstance();
+                Navigator.pop(context);
+              });
+            },
+          );
+        },
 //          index: startingIndex,
-          viewportFraction: 0.3,
-          scale: 0.0001,
-          fade: 0.01,
-          scrollDirection: Axis.vertical,
-          physics: FixedExtentScrollPhysics(),
+        viewportFraction: 0.3,
+        scale: 0.0001,
+        fade: 0.01,
+        scrollDirection: Axis.vertical,
+        physics: FixedExtentScrollPhysics(),
 //          onTap: (i) => print ("outside "+i.toString()),
-        ),
       ),
     );
   }
@@ -181,27 +180,31 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
-                        currState ? Text(
-                          "اليوم",
-                          style: TextStyle(
-                            color: Color(0xFFFFC819),
-                            fontWeight: FontWeight.bold,
-                            fontSize: 30,
-                            fontFamily: 'Tajawal',
-                          ),
-                        ) : showIftarImsakTime("الامساك"),
+                        currState
+                            ? Text(
+                                "اليوم",
+                                style: TextStyle(
+                                  color: Color(0xFFFFC819),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 30,
+                                  fontFamily: 'Tajawal',
+                                ),
+                              )
+                            : showIftarImsakTime("الامساك"),
                         Expanded(
                           child: Container(),
                         ),
-                        currState ? Text(
-                          "مواقيت",
-                          style: TextStyle(
-                            color: Color(0xFFFFC819),
-                            fontWeight: FontWeight.bold,
-                            fontSize: 30,
-                            fontFamily: 'Tajawal',
-                          ),
-                        ) : showIftarImsakTime("الافطار"),
+                        currState
+                            ? Text(
+                                "مواقيت",
+                                style: TextStyle(
+                                  color: Color(0xFFFFC819),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 30,
+                                  fontFamily: 'Tajawal',
+                                ),
+                              )
+                            : showIftarImsakTime("الافطار"),
                       ],
                     ),
                   )
@@ -247,91 +250,51 @@ class _MyHomePageState extends State<MyHomePage> {
         ListTile(
           title: Text(
             "الفجر",
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'Tajawal',
-            ),
+            style: MyTextStyle.minorText,
           ),
           trailing: Text(
             data[0].timings.fajr,
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'Tajawal',
-            ),
+            style: MyTextStyle.minorText,
           ),
         ),
         ListTile(
           title: Text(
             "الظهر",
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'Tajawal',
-            ),
+            style: MyTextStyle.minorText,
           ),
           trailing: Text(
             data[0].timings.dhuhr,
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'Tajawal',
-            ),
+            style: MyTextStyle.minorText,
           ),
         ),
         ListTile(
           title: Text(
             "العصر",
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'Tajawal',
-            ),
+            style: MyTextStyle.minorText,
           ),
           trailing: Text(
             data[0].timings.asr,
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'Tajawal',
-            ),
+            style: MyTextStyle.minorText,
           ),
         ),
         ListTile(
           title: Text(
             "المغرب",
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'Tajawal',
-            ),
+            style: MyTextStyle.minorText,
           ),
           trailing: Text(
             data[0].timings.maghrib,
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'Tajawal',
-            ),
+            style: MyTextStyle.minorText,
           ),
         ),
         ListTile(
           title: Text(
             "العشاء",
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'Tajawal',
-            ),
+            style: MyTextStyle.minorText,
           ),
           trailing: Text(
             data[0].timings.isha,
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'Tajawal',
-            ),
+            style: MyTextStyle.minorText,
           ),
         ),
       ],
@@ -363,8 +326,11 @@ class _MyHomePageState extends State<MyHomePage> {
                 if (!snapshot.hasData) return CircularProgressIndicator();
 
                 // TODO: adjust data to be for every day not just the first
-                String iftar = Data.fromSnapshot(snapshot.data.documents[0]).timings.maghrib;
-                String imsak = Data.fromSnapshot(snapshot.data.documents[0]).timings.imsak;
+                String iftar = Data.fromSnapshot(snapshot.data.documents[0])
+                    .timings
+                    .maghrib;
+                String imsak =
+                    Data.fromSnapshot(snapshot.data.documents[0]).timings.imsak;
                 return Text(
                   which == "الامساك" ? imsak : iftar,
                   style: TextStyle(
@@ -416,18 +382,22 @@ class _MyHomePageState extends State<MyHomePage> {
       top: width - 40,
       child: FractionalTranslation(
         translation: Offset(0.0, -0.5),
-        child: FloatingActionButton(
-          onPressed: () {
+        child: GestureDetector(
+          onHorizontalDragEnd: (dragEndDetails) {
             Scaffold.of(context).openDrawer();
           },
-          backgroundColor: Colors.white,
+          onTap: () {
+            Scaffold.of(context).openDrawer();
+          },
           child: Container(
+            decoration:
+                ShapeDecoration(shape: CircleBorder(), color: Colors.white),
             child: Icon(
               Icons.arrow_forward,
               color: primaryColorShades,
               size: 40,
             ),
-            padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
+            padding: EdgeInsets.fromLTRB(20, 5, 5, 5),
           ),
         ),
       ),
@@ -443,6 +413,14 @@ class _MyHomePageState extends State<MyHomePage> {
 //      throw Exception("Check Your Internet Connection");
 //    }
 //  }
+}
+
+abstract class MyTextStyle {
+  static const minorText = TextStyle(
+    color: Colors.white,
+    fontWeight: FontWeight.bold,
+    fontFamily: 'Tajawal',
+  );
 }
 
 class Mclipper extends CustomClipper<Path> {
