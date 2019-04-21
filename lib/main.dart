@@ -1,6 +1,7 @@
 import 'package:emsakia/CircularListItem.dart';
 import 'package:emsakia/Models/CircularItem.dart';
-import 'package:emsakia/Models/Data.dart';
+import 'package:emsakia/Models/DateAndTime/Data.dart';
+import 'package:emsakia/azkar.dart';
 import 'package:flutter/material.dart';
 import 'package:emsakia/Models/APIResponse.dart';
 import 'package:http/http.dart' as http;
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
       routes: {
 //        '/0' : (context) => null,
 //        '/1' : (context) => null,
-//        '/2' : (context) => null,
+        '/2' : (context) => Azkar(),
 //        '/3' : (context) => null,
 //        '/4' : (context) => null,
       },
@@ -64,8 +65,8 @@ class _MyHomePageState extends State<MyHomePage> {
   List<CircularItem> listItems = [
     new CircularItem("الامساكية", 'img/ramdan_cover5.jpg'),
     new CircularItem("مواقيت الصلاة", 'img/ramdan_cover1.jpg'),
-    new CircularItem("القرأن", 'img/ramdan_cover5.jpg'),
-    new CircularItem("الأذكار", 'img/ramdan_cover1.jpg'),
+    new CircularItem("الأذكار", 'img/ramdan_cover5.jpg'),
+    new CircularItem("القرأن", 'img/ramdan_cover1.jpg'),
     new CircularItem("السبحة", 'img/ramdan_cover5.jpg'),
   ];
 
@@ -96,50 +97,39 @@ class _MyHomePageState extends State<MyHomePage> {
       child: Swiper(
         itemCount: 5,
         itemBuilder: (context, index) {
-          return GestureDetector(
-            child: CircleListItem(
-              resizeFactor: resizeFactor,
-              item: listItems[index],
-            ),
-            onTap: () {
-              if ( index == 0 ){
-                if ( currState ){ // if what is showing now is Prayer Times, show Emsakya
-                  setState(() {
-                    startingIndex = index;
-                    firebaseStream =
-                        Firestore.instance.collection('ramadan_date').snapshots();
-                    currState = !currState;
-//                firebaseStream = FireStoreSingleton.getInstance();
-                    Navigator.pop(context);
-                  });
-                }
-                else
-                  Navigator.pop(context);
-              }
-              else if (index == 1) {
-                if ( !currState ){
-                  startingIndex = index;
-                  setState(() {
-                    firebaseStream =
-                        Firestore.instance.collection('ramadan_date').snapshots();
-                    currState = !currState;
-//                firebaseStream = FireStoreSingleton.getInstance();
-                    Navigator.pop(context);
-                  });
-                }
-                else
-                  Navigator.pop(context);
-              }
-            },
+          return CircleListItem(
+            resizeFactor: resizeFactor,
+            item: listItems[index],
           );
         },
-//        index: startingIndex,
+        onTap: (index) {
+          Navigator.pop(context);
+          startingIndex = index;
+          if (index == 0 && currState ) {
+            // if what is showing now is Prayer Times, show Emsakya
+            setState(() {
+              firebaseStream =
+                  Firestore.instance.collection('ramadan_date').snapshots();
+              currState = !currState;
+//                firebaseStream = FireStoreSingleton.getInstance();
+            });
+          } else if (index == 1 && !currState ) {
+            setState(() {
+              firebaseStream =
+                  Firestore.instance.collection('ramadan_date').snapshots();
+              currState = !currState;
+//                firebaseStream = FireStoreSingleton.getInstance();
+            });
+          } else if (index == 2 ) {
+            Navigator.pushNamed(context, '/2');
+          }
+        },
+        index: 1,
         viewportFraction: 0.3,
         scale: 0.0001,
         fade: 0.01,
         scrollDirection: Axis.vertical,
         physics: FixedExtentScrollPhysics(),
-//          onTap: (i) => print ("outside "+i.toString()),
       ),
     );
   }
@@ -241,7 +231,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return Column(
       children: <Widget>[
         SizedBox(
-          height: 300.0,
+          height: 300,
           child: StreamBuilder<QuerySnapshot>(
             stream: firebaseStream,
             builder: (context, snapshot) {
@@ -278,10 +268,9 @@ class _MyHomePageState extends State<MyHomePage> {
     return ListView.builder(
       itemCount: 10,
       itemBuilder: (context, index) {
-        if ( index%2 == 1 )
-          return Divider();
+        if (index % 2 == 1) return Divider();
 
-        int i = index~/2;
+        int i = index ~/ 2;
         return Container(
           margin: EdgeInsets.fromLTRB(20, 0, 25, 0),
           child: ListTile(

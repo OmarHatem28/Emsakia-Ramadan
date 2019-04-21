@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:emsakia/Models/Date.dart';
-import 'package:emsakia/Models/Timing.dart';
+import 'package:emsakia/Models/DateAndTime/Date.dart';
+import 'package:emsakia/Models/DateAndTime/Timing.dart';
 
 class Data {
   Timings timings;
