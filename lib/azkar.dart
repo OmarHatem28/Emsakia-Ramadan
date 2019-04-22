@@ -17,10 +17,10 @@ class Azkar extends StatelessWidget {
     return Column(
       children: <Widget>[
         Expanded(
-          child: Stack(
-            children: <Widget>[
-              Card(
-                child: GestureDetector(
+          child: GestureDetector(
+            child: Stack(
+              children: <Widget>[
+                Card(
                   child: Container(
                     height: 200,
                     decoration: BoxDecoration(
@@ -30,24 +30,34 @@ class Azkar extends StatelessWidget {
                           fit: BoxFit.fill,
                         )),
                   ),
-                  onTap: () => print("Hi"),
+                  elevation: 32,
+                  margin: EdgeInsets.fromLTRB(20, 50, 20, 40),
+                  shape: StadiumBorder(),
                 ),
-                elevation: 32,
-                margin: EdgeInsets.fromLTRB(20, 50, 20, 40),
-                shape: StadiumBorder(),
-              ),
-              Align(
-                child: Text("أذكار الصباح", style: TextStyle(color: primaryColorShades, fontWeight: FontWeight.bold, fontFamily: 'Tajawal', fontSize: 32),),
-              ),
-            ],
+                Align(
+                  child: Text(
+                    "أذكار الصباح",
+                    style: TextStyle(
+                        color: primaryColorShades,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Tajawal',
+                        fontSize: 32),
+                  ),
+                ),
+              ],
+            ),
+            onTap: () => Navigator.pushNamed(context, '/evening_zekr'),
           ),
         ),
-        Divider(height: 10, color: Color(0xFFFFC819),),
+        Divider(
+          height: 10,
+          color: Color(0xFFFFC819),
+        ),
         Expanded(
-          child: Stack(
-            children: <Widget>[
-              Card(
-                child: GestureDetector(
+          child: GestureDetector(
+            child: Stack(
+              children: <Widget>[
+                Card(
                   child: Container(
                     height: 200,
                     decoration: BoxDecoration(
@@ -57,26 +67,32 @@ class Azkar extends StatelessWidget {
                           fit: BoxFit.fill,
                         )),
                   ),
-                  onTap: () {
-                    Navigator.pushNamed(context, '/evening_zekr');
+                  elevation: 32,
+                  margin: EdgeInsets.fromLTRB(20, 40, 20, 50),
+                  shape: StadiumBorder(),
+                ),
+                Align(
+                  child: Text(
+                    "أذكار المساء",
+                    style: TextStyle(
+                        color: Color(0xFFFFC819),
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Tajawal',
+                        fontSize: 32),
+                  ),
+                ),
+              ],
+            ),
+            onTap: () {
+              Navigator.pushNamed(context, '/evening_zekr');
 //                    Navigator.push(
 //                      context,
 //                      MaterialPageRoute(builder: (context) => EveningZekr()),
 //                    );
-                  },
-                ),
-                elevation: 32,
-                margin: EdgeInsets.fromLTRB(20, 40, 20, 50),
-                shape: StadiumBorder(),
-              ),
-              Align(
-                child: Text("أذكار المساء", style: TextStyle(color: Color(0xFFFFC819), fontWeight: FontWeight.bold, fontFamily: 'Tajawal', fontSize: 32),),
-              ),
-            ],
+            },
           ),
         ),
       ],
     );
   }
-
 }
