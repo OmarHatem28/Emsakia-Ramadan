@@ -2,6 +2,7 @@ import 'package:emsakia/CircularListItem.dart';
 import 'package:emsakia/Models/CircularItem.dart';
 import 'package:emsakia/Models/DateAndTime/Data.dart';
 import 'package:emsakia/azkar.dart';
+import 'package:emsakia/evening_zekr.dart';
 import 'package:flutter/material.dart';
 //import 'package:emsakia/Models/APIResponse.dart';
 //import 'package:http/http.dart' as http;
@@ -25,7 +26,8 @@ class MyApp extends StatelessWidget {
       routes: {
 //        '/0' : (context) => null,
 //        '/1' : (context) => null,
-        '/2' : (context) => Azkar(),
+        '/azkar' : (context) => Azkar(),
+        '/evening_zekr' : (context) => EveningZekr(),
 //        '/3' : (context) => null,
 //        '/4' : (context) => null,
       },
@@ -121,7 +123,7 @@ class _MyHomePageState extends State<MyHomePage> {
 //                firebaseStream = FireStoreSingleton.getInstance();
             });
           } else if (index == 2 ) {
-            Navigator.pushNamed(context, '/2');
+            Navigator.pushNamed(context, '/azkar');
           }
         },
         index: 1,

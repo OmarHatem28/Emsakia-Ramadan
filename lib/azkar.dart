@@ -1,4 +1,3 @@
-import 'package:emsakia/evening_zekr.dart';
 import 'package:emsakia/main.dart';
 import 'package:flutter/material.dart';
 
@@ -9,10 +8,7 @@ class Azkar extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
       ),
-      body: Center(
-        child: buildCards(context),
-        heightFactor: 200,
-      ),
+      body: buildCards(context),
       backgroundColor: primaryColorShades,
     );
   }
@@ -29,7 +25,6 @@ class Azkar extends StatelessWidget {
                     height: 200,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(50),
-//            border: Border.all(),
                         image: DecorationImage(
                           image: AssetImage('img/morning1.jpg'),
                           fit: BoxFit.fill,
@@ -57,17 +52,17 @@ class Azkar extends StatelessWidget {
                     height: 200,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(50),
-//            border: Border.all(),
                         image: DecorationImage(
                           image: AssetImage('img/evening3.jpg'),
                           fit: BoxFit.fill,
                         )),
                   ),
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => EveningZekr()),
-                    );
+                    Navigator.pushNamed(context, '/evening_zekr');
+//                    Navigator.push(
+//                      context,
+//                      MaterialPageRoute(builder: (context) => EveningZekr()),
+//                    );
                   },
                 ),
                 elevation: 32,
