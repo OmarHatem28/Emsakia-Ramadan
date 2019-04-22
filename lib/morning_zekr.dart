@@ -14,22 +14,6 @@ class MorningZekrState extends State<MorningZekr> {
 
   List<AzkarContent> myMorningZekr = new List();
 
-  final MaterialColor primaryColorShades = MaterialColor(
-    0xFF38003C,
-    <int, Color>{
-      50: Color(0xFF38003C),
-      100: Color(0xFF38003C),
-      200: Color(0xFF38003C),
-      300: Color(0xFF38003C),
-      400: Color(0xFF38003C),
-      500: Color(0xFF38003C),
-      600: Color(0xFF38003C),
-      700: Color(0xFF38003C),
-      800: Color(0xFF38003C),
-      900: Color(0xFF38003C),
-    },
-  );
-
   @override
   void initState() {
     super.initState();
