@@ -8,87 +8,56 @@ class Azkar extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
       ),
-      body: buildCards(context),
+      body: Column(
+        children: <Widget>[
+          Expanded(
+            child: buildCard(context, 'img/morning1.jpg', "أذكار الصباح", primaryColorShades, '/morning_zekr'),
+          ),
+          Divider(
+            height: 10,
+            color: Color(0xFFFFC819),
+          ),
+          Expanded(
+            child: buildCard(context, 'img/evening3.jpg', "أذكار المساء", Color(0xFFFFC819), '/evening_zekr'),
+          ),
+        ],
+      ),
       backgroundColor: primaryColorShades,
     );
   }
 
-  Widget buildCards(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Expanded(
-          child: GestureDetector(
-            child: Stack(
-              children: <Widget>[
-                Card(
-                  child: Container(
-                    height: 200,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50),
-                        image: DecorationImage(
-                          image: AssetImage('img/morning1.jpg'),
-                          fit: BoxFit.fill,
-                        )),
-                  ),
-                  elevation: 32,
-                  margin: EdgeInsets.fromLTRB(20, 50, 20, 40),
-                  shape: StadiumBorder(),
-                ),
-                Align(
-                  child: Text(
-                    "أذكار الصباح",
-                    style: TextStyle(
-                        color: primaryColorShades,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Tajawal',
-                        fontSize: 32),
-                  ),
-                ),
-              ],
+  Widget buildCard(BuildContext context, String imgPath, String title, Color color, String route) {
+    return GestureDetector(
+      child: Stack(
+        children: <Widget>[
+          Card(
+            child: Container(
+              height: 200,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(50),
+                  image: DecorationImage(
+                    image: AssetImage(imgPath),
+                    fit: BoxFit.fill,
+                  )),
             ),
-            onTap: () => Navigator.pushNamed(context, '/morning_zekr'),
+            elevation: 32,
+            margin: EdgeInsets.fromLTRB(20, 50, 20, 40),
+            shape: StadiumBorder(),
           ),
-        ),
-        Divider(
-          height: 10,
-          color: Color(0xFFFFC819),
-        ),
-        Expanded(
-          child: GestureDetector(
-            child: Stack(
-              children: <Widget>[
-                Card(
-                  child: Container(
-                    height: 200,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50),
-                        image: DecorationImage(
-                          image: AssetImage('img/evening3.jpg'),
-                          fit: BoxFit.fill,
-                        )),
-                  ),
-                  elevation: 32,
-                  margin: EdgeInsets.fromLTRB(20, 40, 20, 50),
-                  shape: StadiumBorder(),
-                ),
-                Align(
-                  child: Text(
-                    "أذكار المساء",
-                    style: TextStyle(
-                        color: Color(0xFFFFC819),
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Tajawal',
-                        fontSize: 32),
-                  ),
-                ),
-              ],
+          Align(
+            child: Text(
+              title,
+              style: TextStyle(
+                  color: color,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Tajawal',
+                  fontSize: 32),
             ),
-            onTap: () {
-              Navigator.pushNamed(context, '/evening_zekr');
-            },
           ),
-        ),
-      ],
+        ],
+      ),
+      onTap: () => Navigator.pushNamed(context, route),
     );
   }
+  
 }
