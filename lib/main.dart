@@ -3,6 +3,7 @@ import 'package:emsakia/Models/CircularItem.dart';
 import 'package:emsakia/Models/DateAndTime/Data.dart';
 import 'package:emsakia/azkar.dart';
 import 'package:emsakia/evening_zekr.dart';
+import 'package:emsakia/morning_zekr.dart';
 import 'package:flutter/material.dart';
 //import 'package:emsakia/Models/APIResponse.dart';
 //import 'package:http/http.dart' as http;
@@ -28,6 +29,7 @@ class MyApp extends StatelessWidget {
 //        '/1' : (context) => null,
         '/azkar' : (context) => Azkar(),
         '/evening_zekr' : (context) => EveningZekr(),
+        '/morning_zekr' : (context) => MorningZekr(),
 //        '/3' : (context) => null,
 //        '/4' : (context) => null,
       },

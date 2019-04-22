@@ -46,7 +46,7 @@ class Azkar extends StatelessWidget {
                 ),
               ],
             ),
-            onTap: () => Navigator.pushNamed(context, '/evening_zekr'),
+            onTap: () => Navigator.pushNamed(context, '/morning_zekr'),
           ),
         ),
         Divider(
@@ -85,10 +85,6 @@ class Azkar extends StatelessWidget {
             ),
             onTap: () {
               Navigator.pushNamed(context, '/evening_zekr');
-//                    Navigator.push(
-//                      context,
-//                      MaterialPageRoute(builder: (context) => EveningZekr()),
-//                    );
             },
           ),
         ),
