@@ -3,14 +3,13 @@ import 'package:emsakia/Models/CircularItem.dart';
 import 'package:emsakia/Models/DateAndTime/Data.dart';
 import 'package:emsakia/azkar.dart';
 import 'package:flutter/material.dart';
-import 'package:emsakia/Models/APIResponse.dart';
-import 'package:http/http.dart' as http;
+//import 'package:emsakia/Models/APIResponse.dart';
+//import 'package:http/http.dart' as http;
 import 'package:circle_wheel_scroll/circle_wheel_scroll_view.dart';
-import 'package:circle_wheel_scroll/circle_wheel_scroll_view.dart' as wheel;
-import 'dart:convert';
+//import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
-import 'Models/FireStoreSingleton.dart';
+//import 'Models/FireStoreSingleton.dart';
 
 void main() => runApp(MyApp());
 
@@ -34,6 +33,22 @@ class MyApp extends StatelessWidget {
   }
 }
 
+final MaterialColor primaryColorShades = MaterialColor(
+  0xFF38003C,
+  <int, Color>{
+    50: Color(0xFF38003C),
+    100: Color(0xFF38003C),
+    200: Color(0xFF38003C),
+    300: Color(0xFF38003C),
+    400: Color(0xFF38003C),
+    500: Color(0xFF38003C),
+    600: Color(0xFF38003C),
+    700: Color(0xFF38003C),
+    800: Color(0xFF38003C),
+    900: Color(0xFF38003C),
+  },
+);
+
 class MyHomePage extends StatefulWidget {
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -46,21 +61,6 @@ class _MyHomePageState extends State<MyHomePage> {
   bool notifications = true;
   int startingIndex = 0;
   var width = 0.0;
-  final MaterialColor primaryColorShades = MaterialColor(
-    0xFF38003C,
-    <int, Color>{
-      50: Color(0xFF38003C),
-      100: Color(0xFF38003C),
-      200: Color(0xFF38003C),
-      300: Color(0xFF38003C),
-      400: Color(0xFF38003C),
-      500: Color(0xFF38003C),
-      600: Color(0xFF38003C),
-      700: Color(0xFF38003C),
-      800: Color(0xFF38003C),
-      900: Color(0xFF38003C),
-    },
-  );
 
   List<CircularItem> listItems = [
     new CircularItem("الامساكية", 'img/ramdan_cover5.jpg'),
