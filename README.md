@@ -1,16 +1,19 @@
-# emsakia
+# Emsakia
 
-A new Flutter application.
+## Emsakia is a cross platform app made with flutter.
 
-## Getting Started
+This app is made to help muslims 
+* know the exact time of prayers during the holy month Ramdan
+* know how much left for Iftar and Imsak
+* it also contains some helpeful features like Morning and Evening Azkar.
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
+![alt text](https://github.com/OmarHatem28/Emsakia-Ramdan/blob/master/screenshots/splash.jpg)
 
-- [Lab: Write your first Flutter app](https://flutter.io/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.io/docs/cookbook)
+![alt text](https://github.com/OmarHatem28/Emsakia-Ramdan/blob/master/screenshots/prayer_times.jpg)
 
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.io/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+![alt text](https://github.com/OmarHatem28/Emsakia-Ramdan/blob/master/screenshots/drawer.jpg)
+
+![alt text](https://github.com/OmarHatem28/Emsakia-Ramdan/blob/master/screenshots/azkar.jpg)
+
+![alt text](https://github.com/OmarHatem28/Emsakia-Ramdan/blob/master/screenshots/evening_zekr.jpg)
