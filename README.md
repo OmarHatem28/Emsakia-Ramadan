@@ -2,8 +2,8 @@
 
 ## Emsakia is a cross platform app made with flutter.
 
-This app is made to help muslims 
-* know the exact time of prayers during the holy month Ramdan
+This app is made to help Muslims
+* know the exact time of prayers during the holy month Ramadan
 * know how much left for Iftar and Imsak
 * it also contains some helpeful features like Morning and Evening Azkar.
 
