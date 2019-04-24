@@ -2,6 +2,7 @@ import 'package:emsakia/CircularListItem.dart';
 import 'package:emsakia/Models/CircularItem.dart';
 import 'package:emsakia/Models/DateAndTime/Data.dart';
 import 'package:emsakia/azkar.dart';
+import 'package:emsakia/doaa.dart';
 import 'package:emsakia/evening_zekr.dart';
 import 'package:emsakia/morning_zekr.dart';
 import 'package:flutter/material.dart';
@@ -24,13 +25,10 @@ class MyApp extends StatelessWidget {
       ),
       home: MyHomePage(),
       routes: {
-//        '/0' : (context) => null,
-//        '/1' : (context) => null,
         '/azkar' : (context) => Azkar(),
         '/evening_zekr' : (context) => EveningZekr(),
         '/morning_zekr' : (context) => MorningZekr(),
-//        '/3' : (context) => null,
-//        '/4' : (context) => null,
+        '/doaa' : (context) => Doaa(),
       },
     );
   }
@@ -69,8 +67,8 @@ class _MyHomePageState extends State<MyHomePage> {
     new CircularItem("الامساكية", 'img/ramdan_cover5.jpg'),
     new CircularItem("مواقيت الصلاة", 'img/ramdan_cover1.jpg'),
     new CircularItem("الأذكار", 'img/ramdan_cover5.jpg'),
+    new CircularItem("الأدعية", 'img/ramdan_cover5.jpg'),
     new CircularItem("القرأن", 'img/ramdan_cover1.jpg'),
-    new CircularItem("السبحة", 'img/ramdan_cover5.jpg'),
   ];
 
   List<Data> myData = new List();
@@ -113,6 +111,8 @@ class _MyHomePageState extends State<MyHomePage> {
             });
           } else if (index == 2 ) {
             Navigator.pushNamed(context, '/azkar');
+          } else if (index == 3 ) {
+            Navigator.pushNamed(context, '/doaa');
           }
         },
         index: 1,

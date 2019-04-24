@@ -41,7 +41,6 @@ class MorningZekrState extends State<MorningZekr> {
         if (!snapshot.hasData) return CircularProgressIndicator();
 
         snapshot.data.documents.forEach((doc) {
-//          print(doc.data);
           myMorningZekr.add(AzkarContent.fromSnapShot(doc));
         });
         return buildSwiper();

@@ -41,7 +41,6 @@ class EveningZekrState extends State<EveningZekr> {
         if (!snapshot.hasData) return CircularProgressIndicator();
 
         snapshot.data.documents.forEach((doc) {
-//          print(doc.data);
           myEveningZekr.add(AzkarContent.fromSnapShot(doc));
         });
         return buildSwiper();
