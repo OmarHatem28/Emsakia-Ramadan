@@ -182,12 +182,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         currState
                             ? Text(
                                 "اليوم",
-                                style: TextStyle(
-                                  color: Color(0xFFFFC819),
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 30,
-                                  fontFamily: 'Tajawal',
-                                ),
+                                style: MyTextStyle.titles,
                               )
                             : showIftarImsakTime("الامساك"),
                         Expanded(
@@ -196,12 +191,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         currState
                             ? Text(
                                 "مواقيت",
-                                style: TextStyle(
-                                  color: Color(0xFFFFC819),
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 30,
-                                  fontFamily: 'Tajawal',
-                                ),
+                          style: MyTextStyle.titles,
                               )
                             : showIftarImsakTime("الافطار"),
                       ],
@@ -324,12 +314,7 @@ class _MyHomePageState extends State<MyHomePage> {
           Container(
             child: Text(
               which,
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 30,
-                fontFamily: 'Tajawal',
-              ),
+              style: MyTextStyle.titles,
             ),
             margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
           ),
@@ -418,6 +403,13 @@ abstract class MyTextStyle {
     color: Colors.white,
     fontWeight: FontWeight.bold,
     fontSize: 18,
+    fontFamily: 'Tajawal',
+  );
+
+  static const titles = TextStyle(
+    color: Color(0xFFFFC819),
+    fontWeight: FontWeight.bold,
+    fontSize: 30,
     fontFamily: 'Tajawal',
   );
 }

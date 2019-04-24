@@ -44,19 +44,30 @@ class MorningZekrState extends State<MorningZekr> {
 //          print(doc.data);
           myMorningZekr.add(AzkarContent.fromSnapShot(doc));
         });
-        return buildSwiper(myMorningZekr);
+        return buildSwiper();
       },
     );
   }
 
-  Widget buildSwiper(List<AzkarContent> myMorningZekr) {
-    return new Swiper(
+  Widget buildSwiper() {
+    return Swiper(
       itemBuilder: (BuildContext context, int index) {
-        return buildItem(index);
+        return Column(
+          children: <Widget>[
+            buildItem(index),
+            Container(
+              child: Align(
+                child: Text("مرات التكرار:  "+myMorningZekr[index].repeat.toString(), style: MyTextStyle.titles, textDirection: TextDirection.rtl,),
+              ),
+              margin: EdgeInsets.only(top: 50),
+              color: primaryColorShades,
+            ),
+          ],
+        );
       },
       itemCount: myMorningZekr.length,
       itemWidth: MediaQuery.of(context).size.width - 10,
-      itemHeight: MediaQuery.of(context).size.height,
+      itemHeight: MediaQuery.of(context).size.height / 1.3,
       layout: SwiperLayout.TINDER,
     );
   }
@@ -65,19 +76,47 @@ class MorningZekrState extends State<MorningZekr> {
     return Stack(
       children: <Widget>[
         Card(
-          child: Image.asset('img/azkar_image.jpg'),
-          elevation: 4,
-          color: Colors.red,
+          child: Image.asset('img/azkar_image.jpg',),
+          elevation: 20,
         ),
-        Align(
-          child: Opacity(
-            opacity: 0.8,
+        Opacity(
+          opacity: 0.7,
+          alwaysIncludeSemantics: true,
+          child: Align(
             child: Container(
+              width: MediaQuery.of(context).size.width - 10,
+              height: MediaQuery.of(context).size.height / 1.95,
               color: Colors.black,
-              padding: EdgeInsets.all(10),
-              child: Text(
-                myMorningZekr[index].zekr,
-                style: MyTextStyle.minorText,
+              padding: EdgeInsets.all(20),
+              child: Column(
+                children: <Widget>[
+                  Expanded(
+                      child: Text(
+                        myMorningZekr[index].zekr,
+                        style: TextStyle(
+                          color: Color(0xFFFFC819),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 17,
+                          fontFamily: 'Tajawal',
+                        ),
+                        textDirection: TextDirection.rtl,
+                      )),
+                  Expanded(
+                    child: Align(
+                      alignment: AlignmentDirectional(0, 1),
+                      child: Text(
+                        myMorningZekr[index].description,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          fontFamily: 'Tajawal',
+                        ),
+                        textDirection: TextDirection.rtl,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
