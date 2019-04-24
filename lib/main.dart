@@ -11,7 +11,6 @@ import 'package:circle_wheel_scroll/circle_wheel_scroll_view.dart';
 //import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
-//import 'Models/FireStoreSingleton.dart';
 
 void main() => runApp(MyApp());
 
@@ -80,8 +79,6 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     firebaseStream = Firestore.instance.collection('ramadan_date').snapshots();
-//    fireStoreSingleton = new FireStoreSingleton();
-//    firebaseStream = FireStoreSingleton.getInstance();
   }
 
   @override
@@ -109,20 +106,10 @@ class _MyHomePageState extends State<MyHomePage> {
         onTap: (index) {
           Navigator.pop(context);
           startingIndex = index;
-          if (index == 0 && currState ) {
-            // if what is showing now is Prayer Times, show Emsakya
+          if ( (index == 0 && currState ) || (index == 1 && !currState ) ) {
+            //if what is showing now is Prayer Times, show Emsakya and vice versa
             setState(() {
-              firebaseStream =
-                  Firestore.instance.collection('ramadan_date').snapshots();
               currState = !currState;
-//                firebaseStream = FireStoreSingleton.getInstance();
-            });
-          } else if (index == 1 && !currState ) {
-            setState(() {
-              firebaseStream =
-                  Firestore.instance.collection('ramadan_date').snapshots();
-              currState = !currState;
-//                firebaseStream = FireStoreSingleton.getInstance();
             });
           } else if (index == 2 ) {
             Navigator.pushNamed(context, '/azkar');
@@ -236,24 +223,53 @@ class _MyHomePageState extends State<MyHomePage> {
       children: <Widget>[
         SizedBox(
           height: 300,
-          child: StreamBuilder<QuerySnapshot>(
-            stream: firebaseStream,
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) return CircularProgressIndicator();
-
-              snapshot.data.documents.sort((docA, docB) => (docA.data['date']
-                      ['hijri']['day'])
-                  .toString()
-                  .compareTo((docB.data['date']['hijri']['day']).toString()));
-              snapshot.data.documents.forEach((doc) {
-                myData.add(Data.fromSnapshot(doc));
-              });
-              return buildSchedule(myData);
-            },
-          ),
+          child: myData.isEmpty ? scheduleStream() : buildSchedule(myData),
         ),
       ],
     );
+  }
+
+  Widget scheduleStream() {
+    return StreamBuilder<QuerySnapshot>(
+      stream: firebaseStream,
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) return CircularProgressIndicator();
+
+        sortDocs(snapshot);
+        snapshot.data.documents.forEach((doc) {
+          myData.add(Data.fromSnapshot(doc));
+        });
+        return buildSchedule(myData);
+      },
+    );
+  }
+
+  Widget iftarImsakTimesStream(String which) {
+    return StreamBuilder<QuerySnapshot>(
+      stream: firebaseStream,
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) return CircularProgressIndicator();
+
+        sortDocs(snapshot);
+        snapshot.data.documents.forEach((doc) {
+          myData.add(Data.fromSnapshot(doc));
+        });
+        // TODO: adjust data to be for every day not just the first
+        String iftar = myData[0].timings.maghrib;
+        String imsak = myData[0].timings.imsak;
+        return Text(
+          which == "الامساك" ? imsak : iftar,
+          style: MyTextStyle.minorText,
+        );
+      },
+    );
+  }
+
+  void sortDocs(AsyncSnapshot<QuerySnapshot> snapshot) {
+    snapshot.data.documents.sort((docA, docB) => (docA.data['date']
+    ['hijri']['day'])
+        .toString()
+        .compareTo((docB.data['date']['hijri']['day']).toString()));
   }
 
   Widget buildSchedule(List<Data> data) {
@@ -264,6 +280,7 @@ class _MyHomePageState extends State<MyHomePage> {
     names.add("العصر");
     names.add("المغرب");
     names.add("العشاء");
+    // TODO: adjust data to be for every day not just the first
     times.add(data[0].timings.fajr);
     times.add(data[0].timings.dhuhr);
     times.add(data[0].timings.asr);
@@ -293,6 +310,14 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget showIftarImsakTime(String which) {
+    String iftar;
+    String imsak;
+    bool available = false;
+    if ( myData.isNotEmpty ){
+      iftar = myData[0].timings.maghrib;
+      imsak = myData[0].timings.imsak;
+      available = true;
+    }
     return Container(
       child: Column(
         children: <Widget>[
@@ -311,23 +336,10 @@ class _MyHomePageState extends State<MyHomePage> {
           Container(
             padding: EdgeInsets.fromLTRB(10, 15, 10, 10),
             margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
-            child: StreamBuilder<QuerySnapshot>(
-              stream: firebaseStream,
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) return CircularProgressIndicator();
-
-                // TODO: adjust data to be for every day not just the first
-                String iftar = Data.fromSnapshot(snapshot.data.documents[0])
-                    .timings
-                    .maghrib;
-                String imsak =
-                    Data.fromSnapshot(snapshot.data.documents[0]).timings.imsak;
-                return Text(
-                  which == "الامساك" ? imsak : iftar,
-                  style: MyTextStyle.minorText,
-                );
-              },
-            ),
+            child: available ? Text(
+              which == "الامساك" ? imsak : iftar,
+              style: MyTextStyle.minorText,
+            ) : iftarImsakTimesStream(which),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5),
               border: Border.all(color: Color(0xFFFFC819), width: 3),
