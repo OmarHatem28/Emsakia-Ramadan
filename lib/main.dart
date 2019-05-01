@@ -35,18 +35,18 @@ class MyApp extends StatelessWidget {
 }
 
 final MaterialColor primaryColorShades = MaterialColor(
-  0xFF38003C,
+  0xFF260028,
   <int, Color>{
-    50: Color(0xFF38003C),
-    100: Color(0xFF38003C),
-    200: Color(0xFF38003C),
-    300: Color(0xFF38003C),
-    400: Color(0xFF38003C),
-    500: Color(0xFF38003C),
-    600: Color(0xFF38003C),
-    700: Color(0xFF38003C),
-    800: Color(0xFF38003C),
-    900: Color(0xFF38003C),
+    50: Color(0xFF260028),
+    100: Color(0xFF260028),
+    200: Color(0xFF260028),
+    300: Color(0xFF260028),
+    400: Color(0xFF260028),
+    500: Color(0xFF260028),
+    600: Color(0xFF260028),
+    700: Color(0xFF260028),
+    800: Color(0xFF260028),
+    900: Color(0xFF260028),
   },
 );
 
@@ -133,7 +133,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           children: <Widget>[
             _buildBackdrop(),
-            currState ? _buildPrayerTimes() : Container(),
+            currState ? _buildPrayerTimes() : buildCurrDay(),
           ],
         ),
       )),
@@ -219,6 +219,39 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  Widget buildCurrDay() {
+    if ( myData.isEmpty ){
+      return StreamBuilder<QuerySnapshot>(
+        stream: firebaseStream,
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return Container(
+              margin: EdgeInsets.only(top: MediaQuery.of(context).size.height / 12),
+              child: CircularProgressIndicator(),
+            );
+          }
+
+          sortDocs(snapshot);
+          if ( myData.isEmpty ){
+            snapshot.data.documents.forEach((doc) {
+              myData.add(Data.fromSnapshot(doc));
+            });
+          }
+          int index = getDayIndex();
+          return Container(
+            margin: EdgeInsets.only(top: MediaQuery.of(context).size.height / 12),
+            child: Text(index.toString()+" رمضان", textDirection: TextDirection.rtl, style: MyTextStyle.titles,),
+          );
+        },
+      );
+    }
+    int index = getDayIndex();
+    return Container(
+      margin: EdgeInsets.only(top: MediaQuery.of(context).size.height / 12),
+      child: Text(index.toString()+" رمضان", textDirection: TextDirection.rtl, style: MyTextStyle.titles,),
+    );
+  }
+
   Widget scheduleStream() {
     return StreamBuilder<QuerySnapshot>(
       stream: firebaseStream,
@@ -226,9 +259,11 @@ class _MyHomePageState extends State<MyHomePage> {
         if (!snapshot.hasData) return CircularProgressIndicator();
 
         sortDocs(snapshot);
-        snapshot.data.documents.forEach((doc) {
-          myData.add(Data.fromSnapshot(doc));
-        });
+        if ( myData.isEmpty ){
+          snapshot.data.documents.forEach((doc) {
+            myData.add(Data.fromSnapshot(doc));
+          });
+        }
         return buildSchedule(myData);
       },
     );
@@ -241,12 +276,15 @@ class _MyHomePageState extends State<MyHomePage> {
         if (!snapshot.hasData) return CircularProgressIndicator();
 
         sortDocs(snapshot);
-        snapshot.data.documents.forEach((doc) {
-          myData.add(Data.fromSnapshot(doc));
-        });
-        // TODO: adjust data to be for every day not just the first
-        String iftar = myData[0].timings.maghrib;
-        String imsak = myData[0].timings.imsak;
+        if ( myData.isEmpty ){
+          snapshot.data.documents.forEach((doc) {
+            myData.add(Data.fromSnapshot(doc));
+          });
+        }
+        int index = getDayIndex();
+        print("day: $index");
+        String iftar = myData[index].timings.maghrib;
+        String imsak = myData[index].timings.imsak;
         return Text(
           which == "الامساك" ? imsak : iftar,
           style: MyTextStyle.minorText,
@@ -262,6 +300,17 @@ class _MyHomePageState extends State<MyHomePage> {
         .compareTo((docB.data['date']['hijri']['day']).toString()));
   }
 
+  int getDayIndex() {
+    int day = DateTime.now().day;
+    for ( int i = 0;i<myData.length;i++){
+      int temp = int.parse(myData[i].date.readable.substring(0,2));
+      if ( day == temp ){
+        return i;
+      }
+    }
+    return 0;
+  }
+
   Widget buildSchedule(List<Data> data) {
     List<String> names = new List();
     List<String> times = new List();
@@ -270,12 +319,13 @@ class _MyHomePageState extends State<MyHomePage> {
     names.add("العصر");
     names.add("المغرب");
     names.add("العشاء");
-    // TODO: adjust data to be for every day not just the first
-    times.add(data[0].timings.fajr);
-    times.add(data[0].timings.dhuhr);
-    times.add(data[0].timings.asr);
-    times.add(data[0].timings.maghrib);
-    times.add(data[0].timings.isha);
+    int index = getDayIndex();
+    print("day: $index");
+    times.add(data[index].timings.fajr);
+    times.add(data[index].timings.dhuhr);
+    times.add(data[index].timings.asr);
+    times.add(data[index].timings.maghrib);
+    times.add(data[index].timings.isha);
     return ListView.builder(
       itemCount: 10,
       itemBuilder: (context, index) {
@@ -302,10 +352,11 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget showIftarImsakTime(String which) {
     String iftar;
     String imsak;
+    int index = getDayIndex();
     bool available = false;
     if ( myData.isNotEmpty ){
-      iftar = myData[0].timings.maghrib;
-      imsak = myData[0].timings.imsak;
+      iftar = myData[index].timings.maghrib;
+      imsak = myData[index].timings.imsak;
       available = true;
     }
     return Container(

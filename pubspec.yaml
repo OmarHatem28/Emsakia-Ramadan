@@ -21,7 +21,6 @@ dependencies:
   cupertino_icons: ^0.1.2
   http: ^0.12.0+1
   circle_wheel_scroll: ^0.0.1+1
-  firebase_core: ^0.3.0
   cloud_firestore: ^0.9.13+1
   flutter_swiper: ^1.1.5
 

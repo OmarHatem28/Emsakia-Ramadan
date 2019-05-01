@@ -101,6 +101,7 @@ class EveningZekrState extends State<EveningZekr> {
                     textDirection: TextDirection.rtl,
                   )),
                   Expanded(
+                    //TODO: fix size on different mobiles
                       child: Align(
                         alignment: AlignmentDirectional(0, 1),
                         child: Text(
