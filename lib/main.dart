@@ -6,10 +6,6 @@ import 'package:emsakia/doaa.dart';
 import 'package:emsakia/evening_zekr.dart';
 import 'package:emsakia/morning_zekr.dart';
 import 'package:flutter/material.dart';
-//import 'package:emsakia/Models/APIResponse.dart';
-//import 'package:http/http.dart' as http;
-import 'package:circle_wheel_scroll/circle_wheel_scroll_view.dart';
-//import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 
@@ -64,11 +60,11 @@ class _MyHomePageState extends State<MyHomePage> {
   var width = 0.0;
 
   List<CircularItem> listItems = [
-    new CircularItem("الامساكية", 'img/ramdan_cover5.jpg'),
-    new CircularItem("مواقيت الصلاة", 'img/ramdan_cover1.jpg'),
-    new CircularItem("الأذكار", 'img/ramdan_cover5.jpg'),
-    new CircularItem("الأدعية", 'img/ramdan_cover5.jpg'),
-    new CircularItem("القرأن", 'img/ramdan_cover1.jpg'),
+    new CircularItem("الامساكية", 'img/ramdan_cover5.webp'),
+    new CircularItem("مواقيت الصلاة", 'img/ramdan_cover1.webp'),
+    new CircularItem("الأذكار", 'img/ramdan_cover5.webp'),
+    new CircularItem("الأدعية", 'img/ramdan_cover5.webp'),
+    new CircularItem("القرأن", 'img/ramdan_cover1.webp'),
   ];
 
   List<Data> myData = new List();
@@ -168,7 +164,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         width: width,
                         height: width,
                         child: Image.asset(
-                          "img/ramdan_cover5.jpg",
+                          "img/ramdan_cover5.webp",
                           fit: BoxFit.cover,
                         ),
                       ),

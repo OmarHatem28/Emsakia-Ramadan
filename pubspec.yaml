@@ -19,8 +19,6 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
-  http: ^0.12.0+1
-  circle_wheel_scroll: ^0.0.1+1
   cloud_firestore: ^0.9.13+1
   flutter_swiper: ^1.1.5
 
@@ -46,12 +44,11 @@ flutter:
   #  - images/a_dot_burr.jpeg
   #  - images/a_dot_ham.jpeg
   assets:
-    - img/ramdan_cover1.jpg
-    - img/ramdan_cover5.jpg
-    - img/azkar_image.jpg
-    - img/evening3.jpg
-    - img/morning1.jpg
-    - img/doaa.jpg
+    - img/ramdan_cover1.webp
+    - img/ramdan_cover5.webp
+    - img/azkar_image.webp
+    - img/evening3.webp
+    - img/morning1.webp
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.

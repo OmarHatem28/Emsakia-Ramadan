@@ -76,7 +76,7 @@ class MorningZekrState extends State<MorningZekr> {
       children: <Widget>[
         Card(
           child: Image.asset(
-            'img/azkar_image.jpg',
+            'img/azkar_image.webp',
             width: MediaQuery.of(context).size.width - 10,
             height: MediaQuery.of(context).size.height / 2,
             fit: BoxFit.fill,

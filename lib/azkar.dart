@@ -11,14 +11,14 @@ class Azkar extends StatelessWidget {
       body: Column(
         children: <Widget>[
           Expanded(
-            child: buildCard(context, 'img/morning1.jpg', "أذكار الصباح", primaryColorShades, '/morning_zekr'),
+            child: buildCard(context, 'img/morning1.webp', "أذكار الصباح", primaryColorShades, '/morning_zekr'),
           ),
           Divider(
             height: 10,
             color: Color(0xFFFFC819),
           ),
           Expanded(
-            child: buildCard(context, 'img/evening3.jpg', "أذكار المساء", Color(0xFFFFC819), '/evening_zekr'),
+            child: buildCard(context, 'img/evening3.webp', "أذكار المساء", Color(0xFFFFC819), '/evening_zekr'),
           ),
         ],
       ),

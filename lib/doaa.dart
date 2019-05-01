@@ -100,8 +100,8 @@ class DoaaState extends State<Doaa> {
                 children: <Widget>[
                   Expanded(
                     child: IconButton(
-                        icon: Icon(Icons.share),
-                        onPressed: () => print("Shared")),
+                        icon: Icon(Icons.content_copy),
+                        onPressed: () => print("Copied to Clipboard")),
                   ),
                   Expanded(
                     child: IconButton(
