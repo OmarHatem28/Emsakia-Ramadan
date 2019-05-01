@@ -75,49 +75,48 @@ class MorningZekrState extends State<MorningZekr> {
     return Stack(
       children: <Widget>[
         Card(
-          child: Image.asset('img/azkar_image.jpg',),
+          child: Image.asset(
+            'img/azkar_image.jpg',
+            width: MediaQuery.of(context).size.width - 10,
+            height: MediaQuery.of(context).size.height / 2,
+            fit: BoxFit.fill,
+          ),
           elevation: 20,
         ),
-        Opacity(
-          opacity: 0.7,
-          alwaysIncludeSemantics: true,
-          child: Align(
-            child: Container(
-              width: MediaQuery.of(context).size.width - 10,
-              height: MediaQuery.of(context).size.height / 1.95,
-              color: Colors.black,
-              padding: EdgeInsets.all(20),
-              child: Column(
-                children: <Widget>[
-                  Expanded(
-                      child: Text(
-                        myMorningZekr[index].zekr,
-                        style: TextStyle(
-                          color: Color(0xFFFFC819),
-                          fontWeight: FontWeight.bold,
-                          fontSize: 17,
-                          fontFamily: 'Tajawal',
-                        ),
-                        textDirection: TextDirection.rtl,
-                      )),
-                  Expanded(
-                    child: Align(
-                      alignment: AlignmentDirectional(0, 1),
-                      child: Text(
-                        myMorningZekr[index].description,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                          fontFamily: 'Tajawal',
-                        ),
-                        textDirection: TextDirection.rtl,
-                      ),
+        Container(
+          width: MediaQuery.of(context).size.width - 10,
+          height: MediaQuery.of(context).size.height / 1.97,
+          color: Color.fromRGBO(0, 0, 0, 0.7),
+          padding: EdgeInsets.all(20),
+          child: Column(
+            children: <Widget>[
+              Expanded(
+                  child: Text(
+                    myMorningZekr[index].zekr,
+                    style: TextStyle(
+                      color: Color(0xFFFFC819),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 17,
+                      fontFamily: 'Tajawal',
                     ),
+                    textDirection: TextDirection.rtl,
+                  )),
+              Expanded(
+                child: Align(
+                  alignment: AlignmentDirectional(0, 1),
+                  child: Text(
+                    myMorningZekr[index].description,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                      fontFamily: 'Tajawal',
+                    ),
+                    textDirection: TextDirection.rtl,
                   ),
-                ],
+                ),
               ),
-            ),
+            ],
           ),
         ),
       ],

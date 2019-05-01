@@ -282,7 +282,6 @@ class _MyHomePageState extends State<MyHomePage> {
           });
         }
         int index = getDayIndex();
-        print("day: $index");
         String iftar = myData[index].timings.maghrib;
         String imsak = myData[index].timings.imsak;
         return Text(
@@ -320,7 +319,6 @@ class _MyHomePageState extends State<MyHomePage> {
     names.add("المغرب");
     names.add("العشاء");
     int index = getDayIndex();
-    print("day: $index");
     times.add(data[index].timings.fajr);
     times.add(data[index].timings.dhuhr);
     times.add(data[index].timings.asr);
