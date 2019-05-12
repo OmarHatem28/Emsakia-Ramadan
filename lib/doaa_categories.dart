@@ -36,6 +36,7 @@ class DoaaCategoriesState extends State<DoaaCategories> {
       builder: (context, snapshot) {
         if (!snapshot.hasData) return Center(child: CircularProgressIndicator(),);
 
+        doaaCategoryList.clear();
         snapshot.data.documents.forEach((doc) {
           doaaCategoryList.add(DoaaContent.fromSnapShot(doc));
         });
@@ -45,7 +46,6 @@ class DoaaCategoriesState extends State<DoaaCategories> {
   }
 
   Widget buildList() {
-    print(doaaCategoryList.length);
     return ListView.builder(
       itemCount: doaaCategoryList.length,
       itemBuilder: (context, index) {
