@@ -15,7 +15,7 @@ class Doaa extends StatefulWidget {
 
 class DoaaState extends State<Doaa> {
   Stream firebaseStream;
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  BuildContext _scaffoldContext;
 
   @override
   void initState() {
@@ -26,7 +26,6 @@ class DoaaState extends State<Doaa> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffoldKey,
       appBar: AppBar(
         backgroundColor: primaryColorShades,
       ),
@@ -41,6 +40,7 @@ class DoaaState extends State<Doaa> {
     return ListView.builder(
       itemCount: widget.myDoaa.length,
       itemBuilder: (context, index) {
+        _scaffoldContext = context;
         return buildItem(index);
       },
     );
@@ -94,13 +94,11 @@ class DoaaState extends State<Doaa> {
                         onPressed: () {
                           Clipboard.setData(ClipboardData(
                               text: widget.myDoaa[index].doaa_data));
-                          _scaffoldKey.currentState.showSnackBar(SnackBar(
-                              content: Text("Copied Successfully To Clipboard")
+                          Scaffold.of(_scaffoldContext).showSnackBar(SnackBar(
+                              content:
+                                  Text("Copied Successfully To Clipboard"),
+                            duration: Duration(seconds: 1),
                           ));
-//                          Scaffold.of(context).showSnackBar(SnackBar(
-//                              content:
-//                                  Text("Copied Successfully To Clipboard"),
-//                          ));
                         }),
                   ),
                   Expanded(
