@@ -15,7 +15,6 @@ class DoaaContent {
     ds.data['zekr'].forEach((zekr) {
       doaa_list.add(DoaaData.fromJson(zekr));
     });
-    print(doaa_list[0].doaa_data);
   }
 
 }

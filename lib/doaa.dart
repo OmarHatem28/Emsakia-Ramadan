@@ -2,8 +2,6 @@ import 'package:emsakia/Models/Doaa/DoaaContent.dart';
 import 'package:emsakia/main.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_swiper/flutter_swiper.dart';
-import 'Models/Azkar/AzkarContent.dart';
 
 class Doaa extends StatefulWidget {
   @override
