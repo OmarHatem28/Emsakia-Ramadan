@@ -17,3 +17,7 @@ This app is made to help Muslims
 ![alt text](https://github.com/OmarHatem28/Emsakia-Ramdan/blob/master/screenshots/azkar.jpg)
 
 ![alt text](https://github.com/OmarHatem28/Emsakia-Ramdan/blob/master/screenshots/evening_zekr.jpg)
+
+![alt text](https://github.com/OmarHatem28/Emsakia-Ramdan/blob/master/screenshots/doaa.jpg)
+
+![alt text](https://github.com/OmarHatem28/Emsakia-Ramdan/blob/master/screenshots/doaa_categories.jpg)
