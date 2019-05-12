@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:emsakia/Models/Doaa/DoaaContent.dart';
+import 'package:emsakia/doaa.dart';
 import 'package:emsakia/main.dart';
 import 'package:flutter/material.dart';
 
@@ -12,7 +13,7 @@ class DoaaCategories extends StatefulWidget {
 class DoaaCategoriesState extends State<DoaaCategories> {
   Stream firebaseStream;
 
-  List<DoaaContent> myDoaa = new List();
+  List<DoaaContent> doaaCategoryList = new List();
 
   @override
   void initState() {
@@ -33,10 +34,10 @@ class DoaaCategoriesState extends State<DoaaCategories> {
     return StreamBuilder<QuerySnapshot>(
       stream: firebaseStream,
       builder: (context, snapshot) {
-        if (!snapshot.hasData) return CircularProgressIndicator();
+        if (!snapshot.hasData) return Center(child: CircularProgressIndicator(),);
 
         snapshot.data.documents.forEach((doc) {
-          myDoaa.add(DoaaContent.fromSnapShot(doc));
+          doaaCategoryList.add(DoaaContent.fromSnapShot(doc));
         });
         return buildList();
       },
@@ -44,12 +45,23 @@ class DoaaCategoriesState extends State<DoaaCategories> {
   }
 
   Widget buildList() {
-    print(myDoaa.length);
+    print(doaaCategoryList.length);
     return ListView.builder(
-      itemCount: myDoaa.length,
+      itemCount: doaaCategoryList.length,
       itemBuilder: (context, index) {
         return Container(
-          child: buildItem(index),
+          child: GestureDetector(
+            child: buildItem(index),
+            onTap: () {
+//              Navigator.pushNamed(context, '/doaa', arguments: doaaCategoryList[index].doaa_list);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Doaa(doaaCategoryList[index].doaa_list),
+                ),
+              );
+            },
+          ),
           margin: EdgeInsets.fromLTRB(0, 8, 0, 8),
         );
       },
@@ -78,18 +90,21 @@ class DoaaCategoriesState extends State<DoaaCategories> {
           child: Card(
             color: Colors.greenAccent,
             margin: EdgeInsets.only(top: 25),
-            child: Text(
-              myDoaa[index].title,
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-//                color: Color(0xFFFFC819),
-                color: primaryColorShades
+            child: Container(
+              child: Text(
+                doaaCategoryList[index].title,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: primaryColorShades,
+                ),
+                textDirection: TextDirection.rtl,
+                textAlign: TextAlign.center,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 5,
               ),
-              textDirection: TextDirection.rtl,
-              textAlign: TextAlign.center,
-              overflow: TextOverflow.ellipsis,
-              maxLines: 5,
+//              padding: EdgeInsets.all(5),
+              padding: EdgeInsets.only(top: 5,bottom: 5),
             ),
           ),
           flex: 3,

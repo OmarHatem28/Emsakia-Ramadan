@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
         '/azkar' : (context) => Azkar(),
         '/evening_zekr' : (context) => EveningZekr(),
         '/morning_zekr' : (context) => MorningZekr(),
-        '/doaa' : (context) => DoaaCategories(),
+        '/doaa_categories' : (context) => DoaaCategories(),
       },
     );
   }
@@ -109,7 +109,7 @@ class _MyHomePageState extends State<MyHomePage> {
           } else if (index == 2 ) {
             Navigator.pushNamed(context, '/azkar');
           } else if (index == 3 ) {
-            Navigator.pushNamed(context, '/doaa');
+            Navigator.pushNamed(context, '/doaa_categories');
           }
         },
         index: 1,

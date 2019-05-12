@@ -1,17 +1,21 @@
-import 'package:emsakia/Models/Doaa/DoaaContent.dart';
+import 'package:emsakia/Models/Doaa/DoaaData.dart';
 import 'package:emsakia/main.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/services.dart';
 
 class Doaa extends StatefulWidget {
+  final List<DoaaData> myDoaa;
+
+  Doaa(this.myDoaa);
+
   @override
   State<StatefulWidget> createState() => DoaaState();
 }
 
 class DoaaState extends State<Doaa> {
   Stream firebaseStream;
-
-  List<DoaaContent> myDoaa = new List();
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -22,34 +26,20 @@ class DoaaState extends State<Doaa> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         backgroundColor: primaryColorShades,
       ),
       body: Center(
-        child: buildBody(),
+        child: buildList(),
       ),
 //      backgroundColor: primaryColorShades,
     );
   }
 
-  Widget buildBody() {
-    return StreamBuilder<QuerySnapshot>(
-      stream: firebaseStream,
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) return CircularProgressIndicator();
-
-        snapshot.data.documents.forEach((doc) {
-          myDoaa.add(DoaaContent.fromSnapShot(doc));
-        });
-        return buildList();
-      },
-    );
-  }
-
   Widget buildList() {
-    print(myDoaa.length);
     return ListView.builder(
-      itemCount: myDoaa.length,
+      itemCount: widget.myDoaa.length,
       itemBuilder: (context, index) {
         return buildItem(index);
       },
@@ -66,7 +56,7 @@ class DoaaState extends State<Doaa> {
 //              color: Colors.red,
               padding: EdgeInsets.fromLTRB(30, 10, 10, 10),
               child: Text(
-                myDoaa[index].title,
+                widget.myDoaa[index].doaa_data,
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -78,10 +68,11 @@ class DoaaState extends State<Doaa> {
               ),
               decoration: BoxDecoration(
 //                image: DecorationImage(image: AssetImage('img/doaa.jpg'), fit: BoxFit.fill),
-              ),
+                  ),
             ),
             color: primaryColorShades,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           ),
           margin: EdgeInsets.fromLTRB(
               MediaQuery.of(context).size.width / 4, 20, 20, 20),
@@ -100,12 +91,25 @@ class DoaaState extends State<Doaa> {
                   Expanded(
                     child: IconButton(
                         icon: Icon(Icons.content_copy),
-                        onPressed: () => print("Copied to Clipboard")),
+                        onPressed: () {
+                          Clipboard.setData(ClipboardData(
+                              text: widget.myDoaa[index].doaa_data));
+                          _scaffoldKey.currentState.showSnackBar(SnackBar(
+                              content: Text("Copied Successfully To Clipboard")
+                          ));
+//                          Scaffold.of(context).showSnackBar(SnackBar(
+//                              content:
+//                                  Text("Copied Successfully To Clipboard"),
+//                          ));
+                        }),
                   ),
                   Expanded(
                     child: IconButton(
-                        icon: Icon(Icons.favorite_border),
-                        onPressed: () => print("favorite")),
+                      icon: Icon(Icons.favorite_border),
+                      onPressed: () => print("Added To Favorite"),
+//                        icon: favorite ? Icon(Icons.favorite) : Icon(Icons.favorite_border),
+//                        onPressed: () => setState(() { favorite = !favorite; } )
+                    ),
                   ),
                 ],
               ),
