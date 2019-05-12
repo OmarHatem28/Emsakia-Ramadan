@@ -1,3 +1,4 @@
+import 'package:emsakia/Models/Doaa/DoaaContent.dart';
 import 'package:emsakia/main.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -12,12 +13,12 @@ class Doaa extends StatefulWidget {
 class DoaaState extends State<Doaa> {
   Stream firebaseStream;
 
-  List<AzkarContent> myDoaa = new List();
+  List<DoaaContent> myDoaa = new List();
 
   @override
   void initState() {
     super.initState();
-    firebaseStream = Firestore.instance.collection('doaa').snapshots();
+    firebaseStream = Firestore.instance.collection('doaa_test').snapshots();
   }
 
   @override
@@ -40,7 +41,7 @@ class DoaaState extends State<Doaa> {
         if (!snapshot.hasData) return CircularProgressIndicator();
 
         snapshot.data.documents.forEach((doc) {
-          myDoaa.add(AzkarContent.fromSnapShot(doc));
+          myDoaa.add(DoaaContent.fromSnapShot(doc));
         });
         return buildList();
       },
@@ -67,7 +68,7 @@ class DoaaState extends State<Doaa> {
 //              color: Colors.red,
               padding: EdgeInsets.fromLTRB(30, 10, 10, 10),
               child: Text(
-                myDoaa[index].zekr,
+                myDoaa[index].title,
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,

@@ -234,17 +234,33 @@ class _MyHomePageState extends State<MyHomePage> {
             });
           }
           int index = getDayIndex();
+          var date = DateTime.now();
+          if ( date.day < 6 && date.month == 5 ){
+            index = 30-(6-date.day);
+            return Container(
+              margin: EdgeInsets.only(top: MediaQuery.of(context).size.height / 12),
+              child: Text((index+1).toString()+" شعبان", textDirection: TextDirection.rtl, style: MyTextStyle.titles,),
+            );
+          }
           return Container(
             margin: EdgeInsets.only(top: MediaQuery.of(context).size.height / 12),
-            child: Text(index.toString()+" رمضان", textDirection: TextDirection.rtl, style: MyTextStyle.titles,),
+            child: Text((index+1).toString()+" رمضان", textDirection: TextDirection.rtl, style: MyTextStyle.titles,),
           );
         },
       );
     }
     int index = getDayIndex();
+    var date = DateTime.now();
+    if ( date.day < 6 && date.month == 5 ){
+      index = 30-(6-date.day);
+      return Container(
+        margin: EdgeInsets.only(top: MediaQuery.of(context).size.height / 12),
+        child: Text((index+1).toString()+" شعبان", textDirection: TextDirection.rtl, style: MyTextStyle.titles,),
+      );
+    }
     return Container(
       margin: EdgeInsets.only(top: MediaQuery.of(context).size.height / 12),
-      child: Text(index.toString()+" رمضان", textDirection: TextDirection.rtl, style: MyTextStyle.titles,),
+      child: Text((index+1).toString()+" رمضان", textDirection: TextDirection.rtl, style: MyTextStyle.titles,),
     );
   }
 
@@ -298,8 +314,8 @@ class _MyHomePageState extends State<MyHomePage> {
   int getDayIndex() {
     int day = DateTime.now().day;
     for ( int i = 0;i<myData.length;i++){
-      int temp = int.parse(myData[i].date.readable.substring(0,2));
-      if ( day == temp ){
+      int tempDay = int.parse(myData[i].date.readable.substring(0,2));
+      if ( day == tempDay ){
         return i;
       }
     }
